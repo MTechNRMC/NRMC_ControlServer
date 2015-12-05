@@ -8,6 +8,7 @@
 #include "mds_interface.h"
 #include "systeminterface.h"
 #include "subscribableexchange.h"
+#include "notimplementedexception.h"
 
 using std::queue;
 using Socket::NetworkInterface;
@@ -25,12 +26,15 @@ namespace NRMCNetwork
 		pthread_t mdsThread;
 	  // Operations
 	  public:
+		~MessageDeliverySystem (  );
 		static MessageDeliverySystem& getInstance (  );
+		MessageDeliverySystem& operator+=( NetworkInterface* interface );
+		void attachNetworkInterface( NetworkInterface* interface );
 		void queueMessage ( Message* message );
 		bool startSystem (  );
 		bool stopSystem (  );
 	  private:
-		MessageDeliverySystem ( NetworkInterface* socket );
+		MessageDeliverySystem (  );
 		void handler ( struct sockaddr_in& addr, char* msg );
 	};
 }

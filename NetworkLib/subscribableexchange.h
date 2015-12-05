@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "exchangesubscriber.h"
+#include "notimplementedexception.h"
 
 using std::vector;
 

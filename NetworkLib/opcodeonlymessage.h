@@ -2,6 +2,7 @@
 #define OPCODEONLYMESSAGE_H
 
 #include "message.h"
+#include "notimplementedexception.h"
 
 namespace NRMCNetwork
 {

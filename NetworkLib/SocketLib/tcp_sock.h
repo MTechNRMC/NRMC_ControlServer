@@ -2,6 +2,7 @@
 #define TCP_SOCK_H
 
 #include "networkinterface.h"
+#include "notimplementedexception.h"
 
 namespace Sockets
 {

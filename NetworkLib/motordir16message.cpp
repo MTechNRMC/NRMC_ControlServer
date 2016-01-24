@@ -8,27 +8,31 @@ MotorDir16Message::MotorDir16Message ( int opcode, short motorDir, struct sockad
 {
 }
 
+MotorDir16Message::MotorDir16Message ( const MotorDir16Message& msg )
+{
+}
+
 MotorDir16Message::~MotorDir16Message (  )
 {
 }
 
-struct sockaddr_in& MotorDir16Message::getAddress const (  )
+struct sockaddr_in& MotorDir16Message::getAddress (  ) const
 {
 }
 
-char* MotorDir16Message::getMessage const (  )
+char* MotorDir16Message::getMessage (  ) const
 {
 }
 
-int MotorDir16Message::getOpcode const (  )
+int MotorDir16Message::getOpcode (  ) const
 {
 }
 
-int MotorDir16Message::getMotorDir (  )
+int MotorDir16Message::getMotorDir (  ) const
 {
 }
 
-OpcodeOnlyMessage* MotorDir16Message::clone const (  )
+OpcodeOnlyMessage* MotorDir16Message::clone (  ) const
 {
 }
 

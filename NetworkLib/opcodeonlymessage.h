@@ -20,10 +20,10 @@ namespace NRMCNetwork
 		OpcodeOnlyMessage ( int opcode, struct sockaddr_in& addr );
 		OpcodeOnlyMessage ( const OpcodeOnlyMessage& msg );
 		virtual ~OpcodeOnlyMessage(  );
-		struct sockaddr_in& getAddress const (  );
-		char* getMessage const (  );
-		int getOpcode const (  );
-		OpcodeOnlyMessage* clone const (  );
+		struct sockaddr_in& getAddress (  ) const;
+		char* getMessage (  ) const;
+		int getOpcode (  ) const;
+		OpcodeOnlyMessage* clone (  ) const;
 	};
 }
 

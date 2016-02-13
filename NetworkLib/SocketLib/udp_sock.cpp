@@ -90,14 +90,12 @@ void UDP_Sock::close (  )
 	stopReceive();	// first stop receiving messages
 
 	// close the socket
-	throw NotImplementedException;
+	close(sct);
 }
 
 bool UDP_Sock::connect ( string addr )
 {
 	defaultAddr = addr;
-
-	throw NotImplementedException;
 }
 
 bool UDP_Sock::send ( char* msg )
@@ -123,7 +121,7 @@ bool UDP_Sock::send ( char* msg, string ip )
 	return send(msg, &dst);
 }
 
-bool UDP_Sock::send ( char* msg, const struct sockaddr_in& addr )
+bool UDP_Sock::send ( char* msg, const sockaddr_in& addr )
 {
 	if (sendto(sct, msg, sizeof(msg), 0, (sockaddr*)addr, sizeof(addr)) < 0)
 	{
@@ -134,7 +132,7 @@ bool UDP_Sock::send ( char* msg, const struct sockaddr_in& addr )
 	return true;
 }
 
-bool UDP_Sock::startReceive ( void (*handler)(struct sockaddr_in&, char*) )
+bool UDP_Sock::startReceive ( void (*handler)(sockaddr_in&, char*) )
 {
 	// check if the sock is already receiving
 	if (rx == true)
@@ -196,15 +194,44 @@ bool UDP_Sock::stopReceive (  )
 	return true;
 }
 
-char* UDP_Sock::receive (  )
+char* UDP_Sock::receive ( sockaddr_in& msgAddr )
 {
-	throw NotImplementedException;
+	int msgLength = 0;
+	char buffer[BUFFER_SIZE];
+	char* msg;
+
+	memset(buffer, 0, sizeof(buffer));
+
+	if ((msgLength = recvfrom(sct, buffer, sizeof(buffer), 0, (sockaddr*)msgAddr, sizeof(msgAddr)) < 0)
+		return 0;	// no message received
+
+	msg = new char[msgLength];
+
+	// copy the message from the buffer
+	for (int index = 0; index < msgLength; index++)
+		msg[index] = buffer[index];
+
+	// return the message
+	return msg;
 }
 
-void UDP_Sock::receive ( void (*handler)(struct sockaddr_in, char*) )
+void UDP_Sock::receive ( void (*handler)(sockaddr_in&, char*) )
 {
+	char* msg;
+	sockaddr_in msgAddr;
 	while (rx)
 	{
+		// clear the address
+		memset((char *)&msgAddr, 0, sizeof(msgAddr));
+		msg = receive(&msgAddr);
+
+		//check if a message was received
+		if (msg != 0)
+			handler(&msgAddr, msg);	// pass the info to the handler
+
+		// clean up
+		delete[] msg;
+		msg = 0;
 	}
 }
 

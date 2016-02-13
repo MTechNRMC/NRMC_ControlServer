@@ -14,6 +14,7 @@
 
 #define ADDR_FAMILY AF_INET
 #define DEFAULT_TIMEOUT 1000 // 1 second timeout by default
+#define BUFFER_SIZE 1000
 
 using std::thread;
 
@@ -45,12 +46,12 @@ namespace Sockets
 		bool connect(string addr);
 		bool send(char* msg);
 		bool send(char* msg, string ip);
-		bool send(char* msg, const struct sockaddr_in& addr);
-		bool startReceive(void(*handler)(struct sockaddr_in&, char*));
+		bool send(char* msg, const sockaddr_in& addr);
+		bool startReceive(void(*handler)(sockaddr_in&, char*));
 		bool stopReceive();
-		char* receive();
+		char* receive(sockaddr_in& msgAddr);
 	protected:
-		void receive(void(*handler)(struct sockaddr_in, char*));
+		void receive(void(*handler)(sockaddr_in&, char*));
 	private:
 		exception errorNumToException(int err);
 	};

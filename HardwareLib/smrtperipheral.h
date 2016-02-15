@@ -3,6 +3,7 @@
 
 #include "peripheraltype.h"
 #include "peripheral.h"
+#include "hardwareinterface.h"
 
 class SmrtPeripheral 
 {
@@ -10,11 +11,11 @@ class SmrtPeripheral
   // Attributes
   private:
     Peripheral* peripheral;
-    PeripheralInterface* factory;
+	HardwareInterface* factory;
   // Operations
   public:
     PeripheralType getType (  );
-    SmrtPeripheral ( Peripheral& peripheral, PeripheralInterface& factory );
+    SmrtPeripheral ( Peripheral& peripheral, HardwareInterface& factory );
     ~SmrtPeripheral (  );
     Peripheral* peripheral (  );
 };

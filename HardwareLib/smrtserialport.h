@@ -2,6 +2,7 @@
 #define SMRTSERIALPORT_H
 
 #include "serialportinterface.h"
+#include "serialportfactory.h"
 
 class SmrtSerialPort 
 {

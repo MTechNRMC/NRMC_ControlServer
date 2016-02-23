@@ -18,12 +18,17 @@ MessageDeliverySystem& MessageDeliverySystem::operator+=( NetworkInterface* inte
 
 void MessageDeliverySystem::attachNetworkInterface( NetworkInterface* interface )
 {
-	throw NotImplementedException;
+	if(socket != 0){
+		socket->close();
+		delete socket;
+		socket = 0;
+	}
+	socket = interface;
 }
 
 void MessageDeliverySystem::queueMessage ( Message* message )
 {
-	throw NotImplementedException;
+	msgSendQueue.push_back(message);
 }
 
 bool MessageDeliverySystem::startSystem (  )
@@ -38,12 +43,23 @@ bool MessageDeliverySystem::stopSystem (  )
 
 MessageDeliverySystem::MessageDeliverySystem (  )
 {
-	throw NotImplementedException;
+	socket = 0;
 }
 
 MessageDeliverySystem::~MessageDeliverySystem (  )
 {
-	throw NotImplementedException;
+	stopSystem();
+	
+	if(socket != 0){
+		socket->close();
+		delete socket;
+		socket = 0;
+	}
+	while(!msgSendQueue.empty()){
+		Message* temp = msgSendQueue.pop_front();
+		delete temp;
+		temp = 0;
+	}
 }
 
 void MessageDeliverySystem::handler ( struct sockaddr_in& addr, char* msg )

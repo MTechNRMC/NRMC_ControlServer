@@ -68,13 +68,13 @@
         <dia:point val="70.2618,31.7764"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="70.2118,31.7264;89.2918,43.8264"/>
+        <dia:rectangle val="70.2118,31.7264;86.5968,43.8264"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
         <dia:point val="70.2618,31.7764"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="18.98"/>
+        <dia:real val="16.285"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
         <dia:real val="12"/>
@@ -510,7 +510,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#(*handler)(struct sockaddr_in&amp;, char*)#</dia:string>
+                <dia:string>#(*handler)(sockaddr_in&amp;, char*)#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#void#</dia:string>
@@ -585,7 +585,25 @@
           <dia:attribute name="class_scope">
             <dia:boolean val="false"/>
           </dia:attribute>
-          <dia:attribute name="parameters"/>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#msgAddr#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#sockaddr_in&amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="2"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
         </dia:composite>
       </dia:attribute>
       <dia:attribute name="template">
@@ -595,19 +613,19 @@
     </dia:object>
     <dia:object type="UML - Class" version="0" id="O1">
       <dia:attribute name="obj_pos">
-        <dia:point val="60.1728,-7.11135"/>
+        <dia:point val="60.1728,-6.3114"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="60.1228,-7.16135;83.0528,13.1387"/>
+        <dia:rectangle val="60.1228,-6.3614;82.6678,13.1386"/>
       </dia:attribute>
       <dia:attribute name="elem_corner">
-        <dia:point val="60.1728,-7.11135"/>
+        <dia:point val="60.1728,-6.3114"/>
       </dia:attribute>
       <dia:attribute name="elem_width">
-        <dia:real val="22.830000000000002"/>
+        <dia:real val="22.445"/>
       </dia:attribute>
       <dia:attribute name="elem_height">
-        <dia:real val="20.200000000000003"/>
+        <dia:real val="19.400000000000002"/>
       </dia:attribute>
       <dia:attribute name="name">
         <dia:string>#UDP_Sock#</dia:string>
@@ -814,7 +832,7 @@
         </dia:composite>
         <dia:composite type="umlattribute">
           <dia:attribute name="name">
-            <dia:string>#(*handler)(struct sockaddr_in&amp;, char*)#</dia:string>
+            <dia:string>#(*handler)(sockaddr_in&amp;, char*)#</dia:string>
           </dia:attribute>
           <dia:attribute name="type">
             <dia:string>#void #</dia:string>
@@ -1387,7 +1405,7 @@
                 <dia:string>#addr#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
-                <dia:string>#const struct sockaddr_in&amp;#</dia:string>
+                <dia:string>#const sockaddr_in&amp;#</dia:string>
               </dia:attribute>
               <dia:attribute name="value">
                 <dia:string>##</dia:string>
@@ -1432,7 +1450,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#(*handler)(struct sockaddr_in&amp;, char*)#</dia:string>
+                <dia:string>#(*handler)(sockaddr_in&amp;, char*)#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#void#</dia:string>
@@ -1507,7 +1525,25 @@
           <dia:attribute name="class_scope">
             <dia:boolean val="false"/>
           </dia:attribute>
-          <dia:attribute name="parameters"/>
+          <dia:attribute name="parameters">
+            <dia:composite type="umlparameter">
+              <dia:attribute name="name">
+                <dia:string>#msgAddr#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="type">
+                <dia:string>#sockaddr_in&amp;#</dia:string>
+              </dia:attribute>
+              <dia:attribute name="value">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="comment">
+                <dia:string>##</dia:string>
+              </dia:attribute>
+              <dia:attribute name="kind">
+                <dia:enum val="2"/>
+              </dia:attribute>
+            </dia:composite>
+          </dia:attribute>
         </dia:composite>
         <dia:composite type="umloperation">
           <dia:attribute name="name">
@@ -1540,7 +1576,7 @@
           <dia:attribute name="parameters">
             <dia:composite type="umlparameter">
               <dia:attribute name="name">
-                <dia:string>#(*handler)(struct sockaddr_in, char*)#</dia:string>
+                <dia:string>#(*handler)(sockaddr_in&amp;, char*)#</dia:string>
               </dia:attribute>
               <dia:attribute name="type">
                 <dia:string>#void#</dia:string>
@@ -3909,7 +3945,7 @@
         <dia:point val="70.2115,37.7764"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="51.5255,36.9764;70.2615,38.5764"/>
+        <dia:rectangle val="51.5255,37.0264;70.2615,38.6264"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
@@ -4062,19 +4098,19 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O14">
       <dia:attribute name="obj_pos">
-        <dia:point val="79.7518,31.726"/>
+        <dia:point val="78.4043,31.726"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="71.5378,13.089;80.6018,31.776"/>
+        <dia:rectangle val="71.3453,13.0889;79.2543,31.776"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="79.7518,31.726"/>
-        <dia:point val="79.7518,22.0325"/>
-        <dia:point val="71.5878,22.0325"/>
-        <dia:point val="71.5878,13.139"/>
+        <dia:point val="78.4043,31.726"/>
+        <dia:point val="78.4043,22.0325"/>
+        <dia:point val="71.3953,22.0325"/>
+        <dia:point val="71.3953,13.1389"/>
       </dia:attribute>
       <dia:attribute name="orth_orient">
         <dia:enum val="1"/>
@@ -5595,17 +5631,17 @@
     </dia:object>
     <dia:object type="UML - Realizes" version="1" id="O18">
       <dia:attribute name="obj_pos">
-        <dia:point val="79.7518,31.726"/>
+        <dia:point val="78.4043,31.726"/>
       </dia:attribute>
       <dia:attribute name="obj_bb">
-        <dia:rectangle val="78.9018,13.089;94.0627,31.776"/>
+        <dia:rectangle val="77.5543,13.089;94.0627,31.776"/>
       </dia:attribute>
       <dia:attribute name="meta">
         <dia:composite type="dict"/>
       </dia:attribute>
       <dia:attribute name="orth_points">
-        <dia:point val="79.7518,31.726"/>
-        <dia:point val="79.7518,22.0325"/>
+        <dia:point val="78.4043,31.726"/>
+        <dia:point val="78.4043,22.0325"/>
         <dia:point val="94.0127,22.0325"/>
         <dia:point val="94.0127,13.139"/>
       </dia:attribute>

@@ -22,6 +22,7 @@ namespace NRMCNetwork
 	  private:
 		NetworkInterface* socket;
 		queue<Message*> msgSendQueue;
+		queue<Message*> msgRecvQueue;
 		bool run;
 		pthread_t mdsThread;
 	  // Operations

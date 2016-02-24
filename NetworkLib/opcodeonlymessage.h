@@ -13,7 +13,7 @@ namespace NRMCNetwork
 	  private:
 		char* rawMsg;
 		int opcode;
-		struct sockaddr_in& addr;
+		sockaddr_in addr;
 	  // Operations
 	  public:
 		OpcodeOnlyMessage ( char* msg, struct sockaddr_in& addr );

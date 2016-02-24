@@ -4,24 +4,32 @@ using namespace NRMCNetwork;
 
 SubscribableExchange::SubscribableExchange (  )
 {
+	
 }
 
 SubscribableExchange::~SubscribableExchange (  )
 {
+	while (subscribers.size() > 0)
+	{
+		subscribers.erase (subscribers.begin());
+	}
 }
 
 vector<ExchangeSubscriber*> SubscribableExchange::getSubscribers const (  )
 {
-	throw NotImplementedException;
+	return subscribers;
 }
 
 void SubscribableExchange::subscribe ( ExchangeSubscriber& subscriber )
 {
-	throw NotImplementedException;
+	subscribers.push_back(subscriber);
 }
 
 void SubscribableExchange::updateSubscribers ( const Message& message )
 {
-	throw NotImplementedException;
+	for (int i = 0; i < subscribers.size(); i++)
+	{
+		subscribers[i].queueMessage (message);
+	}
 }
 

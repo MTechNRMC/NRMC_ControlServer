@@ -8,10 +8,16 @@ class MotorDir16Message: public Message
   // Associations
   // Attributes
   private:
-    char* rawMsg;
-    int opcode;
-    short motorDir;
-    struct sockaddr_in& addr;
+	  union Msg
+	  {
+		  char rawMsg[3];
+		  struct Data
+		  {
+			  char opcode;
+			  short motorDir;
+		  } data;
+	  } msg;
+    struct sockaddr_in addr;
   // Operations
   public:
     MotorDir16Message ( char* msg, struct sockaddr_in& addr );
@@ -21,7 +27,7 @@ class MotorDir16Message: public Message
     char* getMessage const (  );
     int getOpcode const (  );
     int getMotorDir (  );
-    OpcodeOnlyMessage* clone const (  );
+	MotorDir16Message* clone const (  );
 };
 
 #endif

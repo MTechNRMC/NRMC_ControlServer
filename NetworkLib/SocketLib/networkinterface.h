@@ -7,7 +7,7 @@
 using std::string;
 using std::exception;
 
-namespace Sockets
+namespace Socket
 {
 	// Interface
 	class NetworkInterface

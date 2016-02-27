@@ -12,6 +12,7 @@
 
 using std::queue;
 using Socket::NetworkInterface;
+using NRMCUtil::SystemInterface;
 
 namespace NRMCNetwork
 {

@@ -1,7 +1,7 @@
 #ifndef SYSTEMINTERFACE_H
 #define SYSTEMINTERFACE_H
 
-namespace NRMCNetwork
+namespace NRMCUtil
 {
 	// Interface
 	class SystemInterface

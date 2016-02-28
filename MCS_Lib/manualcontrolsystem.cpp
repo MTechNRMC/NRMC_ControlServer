@@ -5,8 +5,10 @@ using namespace NRMC_MCS;
 ManualControlSystem::ManualControlSystem ( MDS_Interface& networkInterface, HardwareInterface& hardwareInterface )
 {
 	this->manualControl = true;
+	this->run = false;
 	this->networkInterface = networkInterface;
 	this->hardwareInterface = hardwareInterface;
+	this->mcsThread = 0;
 
 	((SubscribableExchange)networkInterface).subscribe(*this);
 }
@@ -44,10 +46,54 @@ bool ManualControlSystem::subscriberWants ( const Message& message )
 
 bool NRMC_MCS::ManualControlSystem::startSystem()
 {
-	return false;
+	if (run == true)
+		return false;	// already running
+
+	try
+	{
+		run = true;
+		mcsThread = new thread(mcs);
+	}
+	catch (exception& e)
+	{
+		throw e;	// pass along
+	}
+
+	return true;
 }
 
 bool NRMC_MCS::ManualControlSystem::stopSystem()
 {
-	return false;
+	run = false;
+
+	try
+	{
+		// wait the delay *2 to give a chance for a gracefull exit
+		std::this_thread::sleep_for(std::chrono::milliseconds(DELAY * 2));
+
+		// delete the thread
+		if (mcsThread != 0)
+			delete mcsThread;
+
+		rcvThread = 0;
+	}
+	catch (exception& e)
+	{
+		throw e;	// pass the exception along
+	}
+
+	return true;
+}
+
+void NRMC_MCS::ManualControlSystem::mcs()
+{
+	while (run)
+	{
+		while (run && !msgQueue.empty())
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
+		}
+
+			// stop if no commands received
+	}
 }

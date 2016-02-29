@@ -9,13 +9,13 @@ static PeripheralFactory& PeripheralFactory::getInstance (  )
 	return *instance;
 }
 
-SmrtPeripheral* PeripheralFactory::getPeripheral ( PeripheralType type )
+SmrtPeripheral* PeripheralFactory::getPeripheral ( PeripheralType type, bool forceConnect)
 {
-	SmrtPeripheral* peripheral = checkPool(type);
+	SmrtPeripheral* peripheral = forceConnect ? 0 : checkPool(type);
 
 	//check if there was a peroperal of the requested type in the pool and if not attempt to connect a periperal of that type
 	if (peripheral == 0)
-		peripheral = connecPeripheral(type);
+		peripheral = connectPeripheral(type);
 
 	return peripheral;
 }
@@ -68,7 +68,7 @@ SmrtPeripheral * NRMCHardware::PeripheralFactory::checkPool(PeripheralType type)
 		// search if there is already a peripheral in the pool
 		for (vector<Peripheral*>::iterator it = peripheralPool.begin(); it != peripheralPool.end(); ++it)
 		{
-			if ((*it)->getType() == type)
+			if ((*it)->getType() & type != 0)
 			{
 				periperal = new SmrtPeripheral(*(*it), *this);
 				peripheralPool.erase(it);
@@ -80,8 +80,22 @@ SmrtPeripheral * NRMCHardware::PeripheralFactory::checkPool(PeripheralType type)
 	return periperal;
 }
 
-SmrtPeripheral * NRMCHardware::PeripheralFactory::connecPeripheral(PeripheralType type)
+SmrtPeripheral * NRMCHardware::PeripheralFactory::connectPeripheral(PeripheralType type)
 {
-	return nullptr;
+	Peripheral* tmp = 0;
+	SmrtPeripheral* periperal = 0;
+
+	switch (type)
+	{
+	case NRMCHardware::MotorController:
+	case NRMCHardware::ServoController:
+		tmp = srlPrtFactory->openPort(MicroMaestro12::connectedTo, 9600);	// we use a micromaestro for servo and motor control
+		break;
+	}
+
+	if (tmp != 0)
+		periperal = new SmrtPeripheral(*tmp, *this);
+
+	return periperal;
 }
 

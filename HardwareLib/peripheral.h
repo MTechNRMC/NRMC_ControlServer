@@ -18,8 +18,7 @@ namespace NRMCHardware
 		Peripheral (  ){};
 		~Peripheral (  ){};
 		virtual PeripheralType getType (  ) = 0;
-		virtual string getConnectedPort() = 0;
-		virtual bool connectedTo ( SerialPortInterface& port ) = 0;
+		virtual string getConnectedPort(  ) = 0;
 	};
 }
 #endif

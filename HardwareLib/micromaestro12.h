@@ -30,6 +30,7 @@ namespace NRMCHardware
 		MicroMaestro12(SmrtSerialPort* port);
 		~MicroMaestro12();
 		void allStop();
+		static bool connectedTo(SerialPortInterface& port);
 	};
 }
 #endif

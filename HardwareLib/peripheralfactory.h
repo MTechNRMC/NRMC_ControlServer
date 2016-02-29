@@ -6,6 +6,7 @@
 #include "serialportfactory.h"
 #include "hardwareinterface.h"
 #include "peripheraltype.h"
+#include "micromaestro12.h"
 
 using std::vector;
 
@@ -21,14 +22,14 @@ namespace NRMCHardware
 		// Operations
 	public:
 		static PeripheralFactory& getInstance();
-		SmrtPeripheral* getPeripheral(PeripheralType type);
+		SmrtPeripheral* getPeripheral(PeripheralType type, bool forceConnect = false);
 		void attachFactory(SerialPortFactory& factory);
 		void returnPeripheral(Peripheral& peripheral);
 	private:
 		PeripheralFactory();
 		~PeripheralFactory();
 		SmrtPeripheral* checkPool(PeripheralType type);
-		SmrtPeripheral* connecPeripheral(PeripheralType type);
+		SmrtPeripheral* connectPeripheral(PeripheralType type);
 	};
 }
 #endif

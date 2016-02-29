@@ -22,3 +22,8 @@ MicroMaestro12::~MicroMaestro12 (  )
 {
 }
 
+bool NRMCHardware::MicroMaestro12::connectedTo(SerialPortInterface & port)
+{
+	return false;
+}
+

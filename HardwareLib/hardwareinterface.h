@@ -14,7 +14,7 @@ namespace NRMCHardware
 	  public:
 		PeripheralInterface (  )	{};
 		~PeripheralInterface (  )	{};
-		SmrtPeripheral* getPeripheral ( PeripheralType type ) = 0;
+		SmrtPeripheral* getPeripheral ( PeripheralType type, bool forceConnect = false) = 0;
 		void returnPeripheral ( Peripheral& peripheral ) = 0;
 	};
 }

@@ -1,7 +1,10 @@
 #ifndef PERIPHERAL_H
 #define PERIPHERAL_H
 
+#include <string>
 #include "peripheraltype.h"
+
+using std::string;
 
 namespace NRMCHardware
 {
@@ -14,7 +17,8 @@ namespace NRMCHardware
 	  public:
 		Peripheral (  ){};
 		~Peripheral (  ){};
-		PeripheralType getType (  );
+		virtual PeripheralType getType (  ) = 0;
+		virtual string getConnectedPort() = 0;
 		virtual bool connectedTo ( SerialPortInterface& port ) = 0;
 	};
 }

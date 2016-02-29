@@ -1,5 +1,7 @@
 #include "termiosserialport.h"
 
+using namespace NRMCHardware;
+
 string TermiosSerialPort::getPortName (  )
 {
 }

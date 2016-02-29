@@ -1,5 +1,7 @@
 #include "termiosfactory.h"
 
+using namespace NRMCHardware;
+
 static TermiosFactory& TermiosFactory::getInstance (  )
 {
 }

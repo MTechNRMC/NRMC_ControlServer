@@ -1,5 +1,7 @@
 #include "micromaestro12.h"
 
+using namespace NRMCHardware;
+
 int MicroMaestro12::getNumOfServos (  )
 {
 }

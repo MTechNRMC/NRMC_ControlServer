@@ -1,14 +1,16 @@
 #ifndef PARITYBIT_H
 #define PARITYBIT_H
 
-// Enum
-enum ParityBit 
+namespace NRMCHardware
 {
-     Even,
-     Mark,
-     None,
-     Odd,
-     Space
-};
-
+	// Enum
+	enum ParityBit
+	{
+		Even,
+		Mark,
+		None,
+		Odd,
+		Space
+	};
+}
 #endif

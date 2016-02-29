@@ -1,5 +1,7 @@
 #include "smrtperipheral.h"
 
+using namespace NRMCHardware;
+
 PeripheralType SmrtPeripheral::getType (  )
 {
 	return peripheral->getType();

@@ -1,5 +1,7 @@
 #include "smrtserialport.h"
 
+using namespace NRMCHardware;
+
 bool SmrtSerialPort::isClosed const (  )
 {
 	return closed;

@@ -1,5 +1,7 @@
 #include "peripheralfactory.h"
 
+using namespace NRMCHardware;
+
 static PeripheralFactory& PeripheralFactory::getInstance (  )
 {
 }

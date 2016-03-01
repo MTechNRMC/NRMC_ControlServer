@@ -2,12 +2,12 @@
 
 using namespace NRMCHardware;
 
-bool SmrtSerialPort::isClosed const (  )
+bool SmrtSerialPort::isClosed(  ) const
 {
 	return closed;
 }
 
-SerialPortInterface& SmrtSerialPort::serialPort const (  )
+SerialPortInterface& SmrtSerialPort::serialPort(  ) const
 {
 	return serialPort;
 }

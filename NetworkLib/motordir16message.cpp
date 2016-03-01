@@ -1,5 +1,7 @@
 #include "motordir16message.h"
 
+using namespace NRMCNetwork;
+
 MotorDir16Message::MotorDir16Message ( char* msg, struct sockaddr_in& addr )
 {
 	if (sizeof(msg) > 2)

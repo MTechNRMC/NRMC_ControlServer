@@ -6,10 +6,10 @@ namespace NRMCHardware
 	// Enum
 	enum Direction
 	{
-		Stop,
-		Forward,
-		Backward,
-		Both
+		stop,
+		forward,
+		backward,
+		both
 	};
 }
 #endif

@@ -5,13 +5,18 @@
 #include <thread>
 #include <stdexcept>
 
-#include "exchangesubscriber.h"
-#include "hardwareinterface.h"
-#include "smrtperipheral.h"
-#include "systeminterface.h"
-#include "mds_interface.h"
-#include "subscribableexchange.h"
-#include "peripheraltype.h"
+#include "../NetworkLib/exchangesubscriber.h"
+#include "../NetworkLib/mds_interface.h"
+#include "../NetworkLib/subscribableexchange.h"
+#include "../NetworkLib/motordir16message.h"
+#include "../NetworkLib/setspeedbytemessage.h"
+
+#include "../HardwareLib/hardwareinterface.h"
+#include "../HardwareLib/smrtperipheral.h"
+#include "../HardwareLib/motorcontroller.h"
+#include "../HardwareLib/direction.h"
+
+#include "../Util/systeminterface.h"
 
 #define DELAY 100	// 0.1 second delay
 
@@ -22,11 +27,14 @@ using std::exception;
 using NRMCUtil::SystemInterface;
 using NRMCNetwork::ExchangeSubscriber;
 using NRMCNetwork::MDS_Interface;
-using NRMCNetwork::Message;
+using NRMCNetwork::SetSpeedByteMessage;
 using NRMCNetwork::SubscribableExchange;
+using NRMCNetwork::MotorDir16Message;
 using NRMCHardware::HardwareInterface;
 using NRMCHardware::SmrtPeripheral;
 using NRMCHardware::PeripheralType;
+using NRMCHardware::MotorController;
+using NRMCHardware::Direction;
 
 
 namespace NRMC_MCS
@@ -37,10 +45,10 @@ namespace NRMC_MCS
 		// Attributes
 	private:
 		bool manualControl;
-		virtual bool run;
+		volatile bool run;
 		MDS_Interface* networkInterface;
 		HardwareInterface* hardwareInterface;
-		virtual queue<Message*> msgQueue;
+		volatile queue<Message*> msgQueue;
 		thread* mcsThread;
 		// Operations
 	public:
@@ -52,6 +60,9 @@ namespace NRMC_MCS
 		bool stopSystem();
 	private:
 		void mcs();
+		void move(MotorDir16Message* msg, MotorController* controller);
+		void setThrottle(SetSpeedByteMessage* msg, MotorController* controller);
+		void eStop(MotorController* controller);
 	};
 }
 

@@ -8,8 +8,8 @@ namespace NRMCHardware
 	// Enum
 	enum PeripheralType 
 	{
-		 MotorController = 1,
-		 ServoController = 2
+		 motorController = 1,
+		 servoController = 2
 	};
 }
 

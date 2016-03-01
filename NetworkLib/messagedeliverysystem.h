@@ -9,6 +9,7 @@
 #include "systeminterface.h"
 #include "subscribableexchange.h"
 #include "notimplementedexception.h"
+#include "../Util/systeminterface.h"
 
 using std::queue;
 using Socket::NetworkInterface;

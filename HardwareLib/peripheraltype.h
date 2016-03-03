@@ -3,11 +3,14 @@
 
 #include "peripheral.h"
 
-// Enum
-enum PeripheralType 
+namespace NRMCHardware
 {
-     MotorController = 1,
-     ServoController = 2
-};
+	// Enum
+	enum PeripheralType 
+	{
+		 motorController = 1,
+		 servoController = 2
+	};
+}
 
 #endif

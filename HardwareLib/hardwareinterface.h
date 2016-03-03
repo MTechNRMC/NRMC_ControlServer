@@ -3,17 +3,20 @@
 
 #include "peripheraltype.h"
 
-// Interface
-class HardwareInterface 
+namespace NRMCHardware
 {
-  // Associations
-  // Attributes
-  // Operations
-  public:
-	PeripheralInterface (  )	{};
-    ~PeripheralInterface (  )	{};
-    SmrtPeripheral* getPeripheral ( PeripheralType type );
-    void returnPeripheral ( Peripheral& peripheral );
-};
+	// Interface
+	class HardwareInterface 
+	{
+	  // Associations
+	  // Attributes
+	  // Operations
+	  public:
+		PeripheralInterface (  )	{};
+		~PeripheralInterface (  )	{};
+		SmrtPeripheral* getPeripheral ( PeripheralType type, bool forceConnect = false) = 0;
+		void returnPeripheral ( Peripheral& peripheral ) = 0;
+	};
+}
 
 #endif

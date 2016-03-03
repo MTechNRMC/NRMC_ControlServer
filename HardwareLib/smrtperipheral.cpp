@@ -1,5 +1,7 @@
 #include "smrtperipheral.h"
 
+using namespace NRMCHardware;
+
 PeripheralType SmrtPeripheral::getType (  )
 {
 	return peripheral->getType();
@@ -13,10 +15,10 @@ SmrtPeripheral::SmrtPeripheral ( Peripheral& peripheral, HardwareInterface& fact
 
 SmrtPeripheral::~SmrtPeripheral (  )
 {
-	factory->returnPeripheral(peripheral);
+	factory->returnPeripheral(*peripheral);
 }
 
-Peripheral* SmrtPeripheral::peripheral (  )
+Peripheral* SmrtPeripheral::getPeripheral (  )
 {
 	return peripheral;
 }

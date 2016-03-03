@@ -1,13 +1,15 @@
 #ifndef DIRECTION_H
 #define DIRECTION_H
 
-// Enum
-enum Direction 
+namespace NRMCHardware
 {
-     Stop,
-     Forward,
-     Backward,
-     Both
-};
-
+	// Enum
+	enum Direction
+	{
+		stop,
+		forward,
+		backward,
+		both
+	};
+}
 #endif

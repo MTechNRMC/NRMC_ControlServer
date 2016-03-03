@@ -1,6 +1,6 @@
 #include "udp_sock.h"
 
-using namespace Sockets;
+using namespace Socket;
 
 int UDP_Sock::getPort()
 {

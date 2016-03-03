@@ -5,19 +5,21 @@
 #include "peripheral.h"
 #include "hardwareinterface.h"
 
-class SmrtPeripheral 
+namespace NRMCHardware
 {
-  // Associations
-  // Attributes
-  private:
-    Peripheral* peripheral;
-	HardwareInterface* factory;
-  // Operations
-  public:
-    PeripheralType getType (  );
-    SmrtPeripheral ( Peripheral& peripheral, HardwareInterface& factory );
-    ~SmrtPeripheral (  );
-    Peripheral* peripheral (  );
-};
-
+	class SmrtPeripheral
+	{
+		// Associations
+		// Attributes
+	private:
+		Peripheral* peripheral;
+		HardwareInterface* factory;
+		// Operations
+	public:
+		PeripheralType getType();
+		SmrtPeripheral(Peripheral& peripheral, HardwareInterface& factory);
+		~SmrtPeripheral();
+		Peripheral* getPeripheral();
+	};
+}
 #endif

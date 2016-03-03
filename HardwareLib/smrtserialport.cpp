@@ -1,16 +1,18 @@
 #include "smrtserialport.h"
 
-bool SmrtSerialPort::isClosed const (  )
+using namespace NRMCHardware;
+
+bool SmrtSerialPort::isClosed(  ) const
 {
 	return closed;
 }
 
-SerialPortInterface& SmrtSerialPort::serialPort const (  )
+SerialPortInterface& SmrtSerialPort::getSerialPort(  ) const
 {
 	return serialPort;
 }
 
-SmrtSerialPort::SmrtSerialPort ( SerialPortInterface& port, SerialPortFactory& factory )
+SmrtSerialPort::SmrtSerialPort(SerialPortInterface& port, SerialPortFactory& factory)
 {
 	this->closed = false;
 	this->serialPort = port;
@@ -20,12 +22,12 @@ SmrtSerialPort::SmrtSerialPort ( SerialPortInterface& port, SerialPortFactory& f
 SmrtSerialPort::~SmrtSerialPort (  )
 {
 	if (!closed)
-		factory->close(this);
+		close();
 }
 
 bool SmrtSerialPort::close (  )
 {
-	closed = factory->close(this);
+	closed = factory->closePort(*this);
 
 	return closed;
 }

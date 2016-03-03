@@ -18,7 +18,7 @@
 
 using std::thread;
 
-namespace Sockets
+namespace Socket
 {
 	class UDP_Sock : public NetworkInterface {
 		// Associations

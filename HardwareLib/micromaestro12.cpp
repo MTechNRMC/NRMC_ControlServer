@@ -1,5 +1,7 @@
 #include "micromaestro12.h"
 
+using namespace NRMCHardware;
+
 int MicroMaestro12::getNumOfServos (  )
 {
 }
@@ -18,5 +20,10 @@ MicroMaestro12::MicroMaestro12 ( SmrtSerialPort* port )
 
 MicroMaestro12::~MicroMaestro12 (  )
 {
+}
+
+bool NRMCHardware::MicroMaestro12::connectedTo(SerialPortInterface & port)
+{
+	return false;
 }
 

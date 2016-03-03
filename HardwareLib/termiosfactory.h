@@ -5,6 +5,7 @@
 #include <vector>
 #include <exception>
 #include <termios.h>
+#include <sys/stat.h>
 #include "termiosserialport.h"
 #include "serialportfactory.h"
 #include "paritybit.h"
@@ -20,6 +21,8 @@ namespace NRMCHardware
 	class TermiosFactory : public SerialPortFactory
 	{
 		// Attributes
+	private:
+		const string rootPortDir = "/sys/class/tty/";
 	public:
 		vector<string> portPool;
 		// Operations

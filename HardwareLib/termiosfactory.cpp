@@ -35,7 +35,7 @@ SmrtSerialPort* TermiosFactory::openPort ( string portName, int baudRate, Parity
 	return port;
 }
 
-SmrtSerialPort * TermiosFactory::openPort(bool(*checkConnected)(SerialPortInterface &), int baudRate)
+SmrtSerialPort * TermiosFactory::openPort(bool(*checkConnected)(SerialPortInterface&), int baudRate)
 {
 	return openPort(checkConnected, baudRate, ParityBit::None);
 }
@@ -78,14 +78,14 @@ SmrtSerialPort* TermiosFactory::openPort ( bool (*checkConnected)(SerialPortInte
 
 bool TermiosFactory::closePort(SmrtSerialPort& port)
 {
-	bool closed = port.serialPort->close();
+	bool closed = port.getSerialPort().close();
 
 	if(closed)
-		addPortToPool(port.serialPort->getPortName());
+		addPortToPool(port.getSerialPort().getPortName());
 
 	delete port.serialPort;
 
-	return close;
+	return closed;
 }
 void TermiosFactory::addPortToPool(string portName)
 {
@@ -105,6 +105,22 @@ void TermiosFactory::removePortFromPool(string portName)
 void TermiosFactory::refreshAvailablePorts()
 {
 	portPool.clear();	// clear the pool
+
+	// find all active ttys and add them to the list
+	for(int x = 0; x < 256; x++)
+	{
+		string ttyACM = rootPortDir + "ACM" + string(x) + "/device";
+		string ttyUSB = rootPortDir + "USB" + string(x) + "/device";
+		struct stat sb;
+
+		// check for ACM
+		if(lstat(ttyACM.c_str(), &sb) == 0)
+			portPool.push_back(ttyACM);	// port exists
+
+		// check for USB
+		if(lstat(ttyUSB.c_str(), &sb) == 0)
+					portPool.push_back(ttyUSB);	// port exists
+	}
 }
 
 TermiosFactory::TermiosFactory (  )
@@ -116,8 +132,114 @@ TermiosFactory::TermiosFactory (  )
 TermiosFactory::~TermiosFactory (  )
 {}
 
-int NRMCHardware::TermiosFactory::openTermiosPort(string portName, int baudRate, ParityBit parity, int dataBits, StopBit stopBits)
+SerialPortInterface* NRMCHardware::TermiosFactory::openTermiosPort(string portName, int baudRate, ParityBit parity, int dataBits, StopBit stopBits)
 {
-	return 0;
+	speed_t rate;
+	tcflag_t flags;
+	SerialPortInterface* serialPort = 0;
+
+	// set the correct baudRate
+	switch(baudRate)
+	{
+	case 0:
+		rate = B0;
+		break;
+	case 50:
+		rate = B50;
+		break;
+	case 75:
+		rate = B75;
+		break;
+	case 110:
+		rate = B110;
+		break;
+	case 134:
+		rate = B134;
+		break;
+	case 150:
+		rate = B150;
+		break;
+	case 200:
+		rate = B200;
+		break;
+	case 300:
+		rate = B300;
+		break;
+	case 600:
+		rate = B600;
+		break;
+	case 1200:
+		rate = B1200;
+		break;
+	case 1800:
+		rate = B1800;
+		break;
+	case 2400:
+		rate = B2400;
+		break;
+	case 4800:
+		rate = B4800;
+		break;
+	case 9600:
+		rate = B9600;
+		break;
+	case 19200:
+		rate = B19200;
+		break;
+	case 38400:
+		rate = B38400;
+		break;
+	case 57600:
+		rate = B57600;
+		break;
+	case 115200:
+		rate = B115200;
+		break;
+	case 230400:
+		rate = B230400;
+		break;
+	case 460800:
+		rate = B460800;
+		break;
+	case 500000:
+		rate = B500000;
+		break;
+	case 576000:
+		rate = B576000;
+		break;
+	case 921600:
+		rate = B921600;
+		break;
+	case 1000000:
+		rate = B1000000;
+		break;
+	case 1152000:
+		rate = B1152000;
+		break;
+	case 1500000:
+		rate = B1500000;
+		break;
+	case 2000000:
+		rate = B2000000;
+		break;
+	case 2500000:
+		rate = B2500000;
+		break;
+	case 3000000:
+		rate = B3000000;
+		break;
+	case 3500000:
+		rate = B3500000;
+		break;
+	case 4000000:
+		rate = B4000000;
+		break;
+	default:
+		return 0;	// bad baud
+	}
+
+
+
+	return serialPort;
 }
 

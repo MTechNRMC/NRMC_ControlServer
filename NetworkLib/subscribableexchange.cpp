@@ -9,10 +9,10 @@ SubscribableExchange::SubscribableExchange (  )
 
 SubscribableExchange::~SubscribableExchange (  )
 {
-	while (subscribers.size() > 0)
-	{
-		subscribers.erase (subscribers.begin());
-	}
+	for(int i = 0; i < subscribers; i++)
+		delete subscribers[i];
+
+	subscribers.clear();
 }
 
 vector<ExchangeSubscriber*> SubscribableExchange::getSubscribers const (  )

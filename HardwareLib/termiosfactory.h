@@ -44,6 +44,7 @@ namespace NRMCHardware
 		TermiosFactory();
 		~TermiosFactory();
 		SerialPortInterface* openTermiosPort(string portName, int baudRate, ParityBit parity, int dataBits, StopBit stopBits);
-	};
+		speed_t intTospeed_t(int baudRate);
+};
 }
 #endif

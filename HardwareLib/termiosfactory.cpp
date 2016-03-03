@@ -68,8 +68,8 @@ SmrtSerialPort* TermiosFactory::openPort ( bool (*checkConnected)(SerialPortInte
 			delete tmpPort;
 			tmpPort = 0;
 		}
-		catch (exception e)
-		{/*ignore excption*/}
+		catch (exception& e)
+		{/*ignore exception*/}
 	}
 
 	// no device was found connected to the device
@@ -135,15 +135,76 @@ TermiosFactory::~TermiosFactory (  )
 SerialPortInterface* NRMCHardware::TermiosFactory::openTermiosPort(string portName, int baudRate, ParityBit parity, int dataBits, StopBit stopBits)
 {
 	speed_t rate;
-	tcflag_t flags;
-	SerialPortInterface* serialPort = 0;
+	tcflag_t flags = 0;	// set all bits to low
 
 	// set the correct baudRate
-	switch(baudRate)
+	rate = intTospeed_t(baudRate);
+
+	// check if a good baud was returned
+	if(rate == B0)
+		throw exception("Invalid baud rate passed. See termios.h for valid baud rates");
+
+	/*	Keep for reference later
+	// clear parity, stop, and data size bits
+	flags &= ~(PARENB | CSTOPB | CSIZE);*/
+
+	// set the control attributes
+	// set parity bit first Linux can only use Odd or Even
+	switch(parity)
 	{
-	case 0:
-		rate = B0;
+	case ParityBit::Even:
+		flags |= PARENB;	// enable parity odd bit is low so even mode is active
 		break;
+	case ParityBit::Odd:
+		flags |= PARENB;	// enable parity
+		flags |= PARODD;	// set the odd bit for odd mode
+		break;
+	case ParityBit::None:
+		break;		// parity is already disabled
+	default:
+		throw exception("Invalid parity passed. Termios only supports Even, Odd or no parity");
+	}
+
+	// set data bits Linux can only use 5,6,7,8 bits
+	switch(dataBits)
+	{
+	case 5:
+		flags |= CS5;	// 5 data bits
+		break;
+	case 6:
+		flags |= CS6;	// 6 data bits
+		break;
+	case 7:
+		flags |= CS7;	// 7 data bits
+		break;
+	case 8:
+		flags |= CS8;	// 8 data bits
+		break;
+	default:
+		throw exception("Invalid data size passed. Termios only supports 5, 6, 7, and 8");
+	}
+
+	// set the stop bit Linux can only use 1 or 2
+	switch(stopBits)
+	{
+	case StopBit::One:
+		break;				// already set to one stop bit
+	case StopBit::Two:
+		flags |= CSTOPB;	// set two stop bits
+		break;
+	default:
+		throw exception("Invalid stop bit passed. Termios only supports One or Two stop bit(s)");
+	}
+
+	return new TermiosSerialPort(portName, rate, flags);	// create the new serial port
+}
+
+speed_t NRMCHardware::TermiosFactory::intTospeed_t(int baudRate)
+{
+	speed_t rate;
+
+	// set the correct baudRate
+	switch (baudRate) {
 	case 50:
 		rate = B50;
 		break;
@@ -235,11 +296,8 @@ SerialPortInterface* NRMCHardware::TermiosFactory::openTermiosPort(string portNa
 		rate = B4000000;
 		break;
 	default:
-		return 0;	// bad baud
+		rate = B0; // bad baud
 	}
 
-
-
-	return serialPort;
+	return rate;
 }
-

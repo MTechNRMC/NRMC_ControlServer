@@ -29,6 +29,7 @@ using NRMCNetwork::ExchangeSubscriber;
 using NRMCNetwork::MDS_Interface;
 using NRMCNetwork::SetSpeedByteMessage;
 using NRMCNetwork::SubscribableExchange;
+using NRMCNetwork::Message;
 using NRMCNetwork::MotorDir16Message;
 using NRMCHardware::HardwareInterface;
 using NRMCHardware::SmrtPeripheral;
@@ -48,7 +49,7 @@ namespace NRMC_MCS
 		volatile bool run;
 		MDS_Interface* networkInterface;
 		HardwareInterface* hardwareInterface;
-		volatile queue<Message*> msgQueue;
+		queue<Message*> msgQueue;
 		thread* mcsThread;
 		// Operations
 	public:

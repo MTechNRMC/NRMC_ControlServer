@@ -1,6 +1,7 @@
 #ifndef TERMIOSSERIALPORT_H
 #define TERMIOSSERIALPORT_H
 
+#include <termios.h>
 #include "serialportinterface.h"
 
 namespace NRMCHardware
@@ -21,7 +22,7 @@ namespace NRMCHardware
 		TermiosSerialPort(string portName);
 		TermiosSerialPort(string portName, speed_t baudRate);
 		TermiosSerialPort(string portName, speed_t baudRate, tcflag_t controlFlags);
-		~TermiosSerialPort();
+		virtual ~TermiosSerialPort();
 		char* read();
 		string readLine();
 		char* read(int size);

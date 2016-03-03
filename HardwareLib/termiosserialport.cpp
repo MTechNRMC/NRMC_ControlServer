@@ -18,7 +18,7 @@ TermiosSerialPort::TermiosSerialPort ( string portName, speed_t baudRate )
 {
 }
 
-TermiosSerialPort::TermiosSerialPort ( string portName, speed_t baudRate, tcflag_t controlFlags )
+TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_t controlFlags)
 {
 }
 

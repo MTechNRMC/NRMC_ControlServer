@@ -24,6 +24,10 @@ OpcodeOnlyMessage::OpcodeOnlyMessage ( int opcode, struct sockaddr_in& addr )
 OpcodeOnlyMessage::OpcodeOnlyMessage ( const OpcodeOnlyMessage& msg )
 {
 	this->opcode = msg.opcode;
+
+	this->rawMsg = new char[1];			// opcode only messages are only 1 byte long
+	this->rawMsg[1] = msg.rawMsg[1];
+
 	this->addr = msg.addr;
 }
 

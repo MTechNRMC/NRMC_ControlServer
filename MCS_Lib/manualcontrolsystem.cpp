@@ -27,7 +27,8 @@ ManualControlSystem::~ManualControlSystem (  )
 
 void ManualControlSystem::queueMessage ( const Message& message )
 {
-	msgQueue.push(message);
+	Message* tmp = message;
+	msgQueue.push(tmp);
 }
 
 bool ManualControlSystem::subscriberWants ( const Message& message )
@@ -75,7 +76,7 @@ bool NRMC_MCS::ManualControlSystem::stopSystem()
 		if (mcsThread != 0)
 			delete mcsThread;
 
-		rcvThread = 0;
+		mcsThread = 0;
 	}
 	catch (exception& e)
 	{
@@ -125,7 +126,7 @@ void NRMC_MCS::ManualControlSystem::mcs()
 		}
 
 		// stop if no commands received
-		eStop((MotorController*)controller->peripheral());
+		eStop((MotorController*)controller->getPeripheral());
 	}
 }
 
@@ -155,7 +156,7 @@ void NRMC_MCS::ManualControlSystem::move(MotorDir16Message * msg, MotorControlle
 		}
 
 		// send the command
-		controller->setDirection(motor, dirction);
+		controller->setDirection(motor, direction);
 	}
 }
 

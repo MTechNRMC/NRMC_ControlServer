@@ -6,11 +6,10 @@ namespace NRMCHardware
 	// Enum
 	enum StopBit
 	{
-	public:
 		None,
-			One,
-			OnePointFive,
-			Two
+		One,
+		OnePointFive,
+		Two
 	};
 }
 #endif

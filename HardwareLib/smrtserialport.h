@@ -17,7 +17,7 @@ namespace NRMCHardware
 		// Operations
 	public:
 		bool isClosed() const;
-		SerialPortInterface& serialPort() const;
+		SerialPortInterface& getSerialPort() const;
 		SmrtSerialPort(SerialPortInterface& port, SerialPortFactory& factory);
 		~SmrtSerialPort();
 		bool close();

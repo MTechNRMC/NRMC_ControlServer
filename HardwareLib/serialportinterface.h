@@ -1,6 +1,10 @@
 #ifndef SERIALPORTINTERFACE_H
 #define SERIALPORTINTERFACE_H
 
+#include <string>
+
+using std::string;
+
 namespace NRMCHardware
 {
 	// Interface

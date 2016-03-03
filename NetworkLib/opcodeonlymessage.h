@@ -1,8 +1,11 @@
 #ifndef OPCODEONLYMESSAGE_H
 #define OPCODEONLYMESSAGE_H
 
+#include <exception>
 #include "message.h"
 #include "notimplementedexception.h"
+
+using std::exception;
 
 namespace NRMCNetwork
 {

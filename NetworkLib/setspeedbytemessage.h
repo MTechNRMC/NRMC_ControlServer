@@ -21,7 +21,7 @@ namespace NRMCNetwork
 				  char speed;
 			  } data;
 		  } msg;
-		sockaddr_in addr;
+		struct sockaddr_in addr;
 	  // Operations
 	  public:
 		SetSpeedByteMessage ( char* msg, struct sockaddr_in& addr );

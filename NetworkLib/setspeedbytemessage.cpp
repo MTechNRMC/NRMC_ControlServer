@@ -1,4 +1,4 @@
-#include "SetSpeedByteMessage.h"
+#include "setspeedbytemessage.h"
 
 using namespace NRMCNetwork;
 
@@ -14,9 +14,8 @@ SetSpeedByteMessage::SetSpeedByteMessage ( char* msg, struct sockaddr_in& addr )
 	else;
 	// add exception
 }
-}
 
-SetSpeedByteMessage::SetSpeedByteMessage (int opcode, int motorNum, char speed, struct sockaddr_in& addr )
+SetSpeedByteMessage::SetSpeedByteMessage ( int opcode, int motorNum, int speed, struct sockaddr_in& addr )
 {
 	this->msg.data.opcode = (char)opcode;
 	this->msg.data.motorNum = (unsigned short)motorNum;
@@ -25,9 +24,7 @@ SetSpeedByteMessage::SetSpeedByteMessage (int opcode, int motorNum, char speed, 
 
 SetSpeedByteMessage::SetSpeedByteMessage ( const SetSpeedByteMessage& msg )
 {
-	this->msg.data.opcode = msg.msg.data.opcode;
-	this->msg.data.motorNum = msg.msg.data.motorNum;
-	this->msg.data.speed = msg.msg.data.speed;
+	this->msg.data = msg.msg.data;
 	this->addr = msg.addr;
 }
 

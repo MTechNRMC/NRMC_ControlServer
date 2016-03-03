@@ -19,7 +19,7 @@ namespace NRMCHardware
 		PeripheralType getType();
 		SmrtPeripheral(Peripheral& peripheral, HardwareInterface& factory);
 		~SmrtPeripheral();
-		Peripheral* peripheral();
+		Peripheral* getPeripheral();
 	};
 }
 #endif

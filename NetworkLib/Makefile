@@ -7,9 +7,9 @@ LD = g++
 LDFLAGS = 
 LIBS = 
 OBJS = MessageDeliverySystem.o OpcodeOnlyMessage.o SubscribableExchange.o
-TSTOBJS = 
+TSTOBJS = Tests/OpcodeOnlyTest.o
 ARLIB = NRMCNetworkLib.a
-TSTEXEC = 
+TSTEXEC = NetworkTest
 
 #Rules to create target file Driver
 # If any files on line with colon are modified, then recompile the object file

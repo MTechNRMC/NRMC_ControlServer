@@ -1,5 +1,7 @@
+#include <stdexcept>
 #include "motordir16message.h"
 
+using std::invalid_argument;
 using namespace NRMCNetwork;
 
 MotorDir16Message::MotorDir16Message ( char* msg, struct sockaddr_in& addr )
@@ -11,8 +13,8 @@ MotorDir16Message::MotorDir16Message ( char* msg, struct sockaddr_in& addr )
 
 		this->addr = addr;
 	}
-	else;
-	// add exception
+	else
+		throw invalid_argument("Invalid message size");
 }
 
 MotorDir16Message::MotorDir16Message ( int opcode, short motorDir, struct sockaddr_in& addr )
@@ -32,12 +34,12 @@ MotorDir16Message::MotorDir16Message ( const MotorDir16Message& msg )
 MotorDir16Message::~MotorDir16Message (  )
 {}
 
-struct sockaddr_in& MotorDir16Message::getAddress (  ) const
+struct sockaddr_in MotorDir16Message::getAddress (  ) const
 {
-	return &addr;
+	return addr;
 }
 
-char* MotorDir16Message::getMessage (  ) const
+const char* MotorDir16Message::getMessage (  ) const
 {
 	return msg.rawMsg;
 }

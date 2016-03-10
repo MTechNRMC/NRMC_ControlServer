@@ -3,33 +3,41 @@
 using namespace NRMCNetwork;
 
 SubscribableExchange::SubscribableExchange (  )
-{
-	
-}
+{}
 
 SubscribableExchange::~SubscribableExchange (  )
 {
-	for(int i = 0; i < subscribers; i++)
+	for(unsigned int i = 0; i < subscribers.size(); i++)
 		delete subscribers[i];
 
 	subscribers.clear();
 }
 
-vector<ExchangeSubscriber*> SubscribableExchange::getSubscribers const (  )
+const vector<ExchangeSubscriber*> SubscribableExchange::getSubscribers(  ) const
 {
 	return subscribers;
 }
 
 void SubscribableExchange::subscribe ( ExchangeSubscriber& subscriber )
 {
-	subscribers.push_back(subscriber);
+	subscribers.push_back(&subscriber);
+}
+
+void SubscribableExchange::unsubscribe(ExchangeSubscriber& subscriber)
+{
+	// look for the subscriber and delete them
+	for(vector<ExchangeSubscriber*>::iterator it; it != subscribers.end(); ++it)
+	{
+		if(*it == &subscriber)
+			subscribers.erase(it);
+	}
 }
 
 void SubscribableExchange::updateSubscribers ( const Message& message )
 {
-	for (int i = 0; i < subscribers.size(); i++)
+	for (unsigned int i = 0; i < subscribers.size(); i++)
 	{
-		subscribers[i].queueMessage (message);
+		subscribers[i]->queueMessage(message);
 	}
 }
 

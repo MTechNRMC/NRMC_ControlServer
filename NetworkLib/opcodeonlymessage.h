@@ -1,11 +1,7 @@
 #ifndef OPCODEONLYMESSAGE_H
 #define OPCODEONLYMESSAGE_H
 
-#include <exception>
 #include "message.h"
-#include "notimplementedexception.h"
-
-using std::exception;
 
 namespace NRMCNetwork
 {
@@ -14,7 +10,7 @@ namespace NRMCNetwork
 	  // Associations
 	  // Attributes
 	  private:
-		char* rawMsg;
+		char rawMsg[1];
 		int opcode;
 		sockaddr_in addr;
 	  // Operations
@@ -23,8 +19,8 @@ namespace NRMCNetwork
 		OpcodeOnlyMessage ( int opcode, struct sockaddr_in& addr );
 		OpcodeOnlyMessage ( const OpcodeOnlyMessage& msg );
 		virtual ~OpcodeOnlyMessage(  );
-		struct sockaddr_in& getAddress (  ) const;
-		char* getMessage (  ) const;
+		struct sockaddr_in getAddress (  ) const;
+		const char* getMessage (  ) const;
 		int getOpcode (  ) const;
 		OpcodeOnlyMessage* clone (  ) const;
 	};

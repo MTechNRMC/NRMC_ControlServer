@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "exchangesubscriber.h"
-#include "notimplementedexception.h"
 
 using std::vector;
 
@@ -11,8 +10,6 @@ namespace NRMCNetwork
 {
 	class SubscribableExchange
 	{
-	  // Associations
-	   ExchangeSubscriber * unnamed;
 	  // Attributes
 	  private:
 		vector<ExchangeSubscriber*> subscribers;
@@ -20,8 +17,9 @@ namespace NRMCNetwork
 	  public:
 		SubscribableExchange (  );
 		virtual ~SubscribableExchange (   );
-		vector<ExchangeSubscriber*> getSubscribers const (  );
+		const vector<ExchangeSubscriber*> getSubscribers (  ) const;
 		void subscribe ( ExchangeSubscriber& subscriber );
+		void unsubscribe(ExchangeSubscriber& subscriber);
 	  protected:
 		void updateSubscribers ( const Message& message );
 	};

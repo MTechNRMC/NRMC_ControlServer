@@ -28,7 +28,7 @@ void MessageDeliverySystem::attachNetworkInterface( NetworkInterface* interface 
 
 void MessageDeliverySystem::queueMessage ( Message* message )
 {
-	msgSendQueue.push_back(message);
+	msgSendQueue.push(message);
 }
 
 bool MessageDeliverySystem::startSystem (  )
@@ -56,7 +56,7 @@ MessageDeliverySystem::~MessageDeliverySystem (  )
 		socket = 0;
 	}
 	while(!msgSendQueue.empty()){
-		Message* temp = msgSendQueue.pop_front();
+		Message* temp = msgSendQueue.pop();
 		delete temp;
 		temp = 0;
 	}

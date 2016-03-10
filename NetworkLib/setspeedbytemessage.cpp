@@ -1,5 +1,7 @@
+#include <stdexcept>
 #include "setspeedbytemessage.h"
 
+using std::invalid_argument;
 using namespace NRMCNetwork;
 
 SetSpeedByteMessage::SetSpeedByteMessage ( char* msg, struct sockaddr_in& addr )
@@ -11,8 +13,8 @@ SetSpeedByteMessage::SetSpeedByteMessage ( char* msg, struct sockaddr_in& addr )
 
 		this->addr = addr;
 	}
-	else;
-	// add exception
+	else
+		throw invalid_argument("Invalid message size");
 }
 
 SetSpeedByteMessage::SetSpeedByteMessage ( int opcode, int motorNum, int speed, struct sockaddr_in& addr )
@@ -31,12 +33,12 @@ SetSpeedByteMessage::SetSpeedByteMessage ( const SetSpeedByteMessage& msg )
 SetSpeedByteMessage::~SetSpeedByteMessage (   )
 {}
 
-sockaddr_in& SetSpeedByteMessage::getAddress (  ) const
+sockaddr_in SetSpeedByteMessage::getAddress (  ) const
 {
-	return &addr;
+	return addr;
 }
 
-char* SetSpeedByteMessage::getMessage (  ) const
+const char* SetSpeedByteMessage::getMessage (  ) const
 {
 	return msg.rawMsg;
 }

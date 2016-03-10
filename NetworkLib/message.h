@@ -13,8 +13,8 @@ namespace NRMCNetwork
 	  public:
 		Message (  ) {}
 		virtual ~Message (  ) {}
-		virtual struct sockaddr_in& getAddress(  ) const = 0;
-		virtual char* getMessage(  ) const = 0;
+		virtual struct sockaddr_in getAddress(  ) const = 0;
+		virtual const char* getMessage(  ) const = 0;
 		virtual int getOpcode(  ) const = 0;
 		virtual Message* clone(  ) const = 0;
 	};

@@ -2,7 +2,6 @@
 #define OPCODEONLYMESSAGE_H
 
 #include "message.h"
-#include "notimplementedexception.h"
 
 namespace NRMCNetwork
 {
@@ -28,8 +27,8 @@ namespace NRMCNetwork
 		SetSpeedByteMessage ( int opcode, int motorNum, int speed, struct sockaddr_in& addr );
 		SetSpeedByteMessage ( const SetSpeedByteMessage& msg );
 		virtual ~SetSpeedByteMessage(  );
-		sockaddr_in& getAddress (  ) const;
-		char* getMessage (  ) const;
+		sockaddr_in getAddress (  ) const;
+		const char* getMessage (  ) const;
 		int getOpcode (  ) const;
 		int getMotorNum (  ) const;
 		char getSpeed (  ) const;

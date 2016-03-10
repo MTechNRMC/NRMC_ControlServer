@@ -1,12 +1,12 @@
 #Macros to specify compiler, compiler/linking flags, target file
 C++  = g++
-CFLAGS = -Wall -m32 -std=c++11
+CFLAGS = -Wall -std=c++11
 AR = ar
 ARFLAGS = rvs
 LD = g++
 LDFLAGS = 
 LIBS = 
-OBJS = MessageDeliverySystem.o OpcodeOnlyMessage.o SubscribableExchange.o
+OBJS = opcodeonlymessage.o motordir16message.o setspeedbytemessage.o subscribableexchange.o
 TSTOBJS = 
 ARLIB = NRMCNetworkLib.a
 TSTEXEC = 
@@ -18,14 +18,20 @@ all:		$(ARLIB)
 $(ARLIB):	$(OBJS)
 		$(AR) $(ARFLAGS) $(ARLIB) $(OBJS) $(LIBS)
 		
-OpcodeOnlyMessage.o:		message.h opcodeonlymessage.h opcodeonlymessage.cpp
+opcodeonlymessage.o:		message.h opcodeonlymessage.h opcodeonlymessage.cpp
 		$(C++) $(CFLAGS) -c opcodeonlymessage.cpp
-
-SubscribableExchange.o:		exchangesubscriber.h subscriableexchange.h subscriableexchange.cpp
-		$(C++) $(CFLAGS) -c subscriableexchange.cpp
 		
-MessageDeliverySystem.o:	message.h SocketLib/networkinterface.h mds_interface.h systeminterface.h subscribableexchange.h messagedeliverysystem.h messagedeliverysystem.cpp
-		$(C++) $(CFLAGS) -c messagedeliverysystem.cpp
+motordir16message.o:		message.h motordir16message.h motordir16message.cpp
+		$(C++) $(CFLAGS) -c motordir16message.cpp
+		
+setspeedbytemessage.o:		message.h setspeedbytemessage.h setspeedbytemessage.cpp
+		$(C++) $(CFLAGS) -c setspeedbytemessage.cpp
+
+subscribableexchange.o:		exchangesubscriber.h subscribableexchange.h subscribableexchange.cpp
+		$(C++) $(CFLAGS) -c subscribableexchange.cpp
+		
+#MessageDeliverySystem.o:	message.h SocketLib/networkinterface.h mds_interface.h systeminterface.h subscribableexchange.h messagedeliverysystem.h messagedeliverysystem.cpp
+#		$(C++) $(CFLAGS) -c messagedeliverysystem.cpp
 		
 clean:
 		rm -f $(OBJS) $(TSTEXEC) $(ARLIB) $(TSTOBJS)

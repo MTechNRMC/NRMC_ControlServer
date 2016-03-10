@@ -9,7 +9,7 @@ OpcodeOnlyMessage::OpcodeOnlyMessage ( char* msg, struct sockaddr_in& addr )
 	if (msg == 0)
 		throw invalid_argument("Null message was passed");
 
-	this->rawMsg[0] = msg[1];	// first byte of the message is the opcode
+	this->rawMsg[0] = msg[0];	// first byte of the message is the opcode
 	this->addr = addr;
 	this->opcode = (int)rawMsg[0];
 }

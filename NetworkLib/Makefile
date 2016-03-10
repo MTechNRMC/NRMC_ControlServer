@@ -1,15 +1,18 @@
 #Macros to specify compiler, compiler/linking flags, target file
 C++  = g++
 CFLAGS = -Wall -std=c++11
+CTESTFLAGS = -g -pthread
+GTESTFLAGS = -L ../googletest-release-1.7.0/ -l gtest -l gtest_main 
+TESTINCLUDES = -I ../googletest-release-1.7.0/include/
 AR = ar
 ARFLAGS = rvs
 LD = g++
 LDFLAGS = 
 LIBS = 
 OBJS = opcodeonlymessage.o motordir16message.o setspeedbytemessage.o subscribableexchange.o
-TSTOBJS = 
+TSTOBJS = Tests/opcodeonlytest.o
 ARLIB = NRMCNetworkLib.a
-TSTEXEC = 
+TSTEXEC = Tests/networktest
 
 #Rules to create target file Driver
 # If any files on line with colon are modified, then recompile the object file
@@ -39,4 +42,7 @@ clean:
 test:		$(TSTEXEC)
 
 $(TSTEXEC):	$(ARLIB) $(TSTOBJS)
-		$(LD) $(LDFLAGS) -o $(TSTEXEC) $(TSTOBJS) $(ARLIB)
+		$(C++) $(CTESTFLAGS) $(TESTINCLUDES) -o $(TSTEXEC) Tests/networktest.cpp $(GTESTFLAGS) $(TSTOBJS) $(ARLIB)
+		
+Tests/opcodeonlytest.o:			Tests/opcodeonlytest.cpp opcodeonlymessage.h
+		$(C++) $(CTESTFLAGS) $(GTESTFLAGS) -c Tests/opcodeonlytest.cpp $(TESTINCLUDES) -o Tests/opcodeonlytest.o

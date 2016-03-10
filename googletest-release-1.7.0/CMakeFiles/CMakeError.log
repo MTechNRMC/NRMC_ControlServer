@@ -1,0 +1,57 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2511290758/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2511290758.dir/build.make CMakeFiles/cmTryCompileExec2511290758.dir/build
+make[1]: Entering directory '/media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2511290758.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec2511290758.dir/CheckSymbolExists.c.o   -c /media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec2511290758
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2511290758.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec2511290758.dir/CheckSymbolExists.c.o  -o cmTryCompileExec2511290758 -rdynamic 
+CMakeFiles/cmTryCompileExec2511290758.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTryCompileExec2511290758.dir/build.make:88: recipe for target 'cmTryCompileExec2511290758' failed
+make[1]: *** [cmTryCompileExec2511290758] Error 1
+make[1]: Leaving directory '/media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp'
+Makefile:117: recipe for target 'cmTryCompileExec2511290758/fast' failed
+make: *** [cmTryCompileExec2511290758/fast] Error 2
+
+File /media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTryCompileExec2076764442/fast"
+/usr/bin/make -f CMakeFiles/cmTryCompileExec2076764442.dir/build.make CMakeFiles/cmTryCompileExec2076764442.dir/build
+make[1]: Entering directory '/media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec2076764442.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec2076764442.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.2/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec2076764442
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2076764442.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec2076764442.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2076764442 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTryCompileExec2076764442.dir/build.make:88: recipe for target 'cmTryCompileExec2076764442' failed
+make[1]: *** [cmTryCompileExec2076764442] Error 1
+make[1]: Leaving directory '/media/pttn40/Cash-Doc_Storage/Documents/LinuxWorkspace/NRMC_ControlServer/googletest-release-1.7.0/CMakeFiles/CMakeTmp'
+Makefile:117: recipe for target 'cmTryCompileExec2076764442/fast' failed
+make: *** [cmTryCompileExec2076764442/fast] Error 2
+
+

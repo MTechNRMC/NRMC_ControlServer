@@ -4,3 +4,7 @@ NetworkLib/Docs/~$R_NetworkLib.docx
 .project
 .cproject
 .settings/language.settings.xml
+*.o
+*.out
+NetworkLib/NRMCNetworkLib.a
+NetworkLib/Tests/networktest

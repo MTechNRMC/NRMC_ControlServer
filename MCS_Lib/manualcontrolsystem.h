@@ -18,8 +18,6 @@
 
 #include "../Util/systeminterface.h"
 
-#define DELAY 100	// 0.1 second delay
-
 using std::queue;
 using std::thread;
 using std::exception;

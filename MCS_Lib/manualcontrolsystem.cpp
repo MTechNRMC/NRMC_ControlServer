@@ -1,5 +1,7 @@
 #include "manualcontrolsystem.h"
 
+#define DELAY 100	// 0.1 second delay
+
 using namespace NRMC_MCS;
 
 ManualControlSystem::ManualControlSystem ( MDS_Interface& networkInterface, HardwareInterface& hardwareInterface )
@@ -27,7 +29,7 @@ ManualControlSystem::~ManualControlSystem (  )
 
 void ManualControlSystem::queueMessage ( const Message& message )
 {
-	Message* tmp = message;
+	Message* tmp = message.clone();
 	msgQueue.push(tmp);
 }
 

@@ -2,7 +2,7 @@
 #define MESSAGEDELIVERYSYSTEM_H
 
 #include <queue>
-#include <pthread.h>
+#include <thread>
 #include "message.h"
 #include "SocketLib/networkinterface.h"
 #include "mds_interface.h"
@@ -12,6 +12,7 @@
 #include "../Util/systeminterface.h"
 
 using std::queue;
+using std::thread;
 using Socket::NetworkInterface;
 using NRMCUtil::SystemInterface;
 
@@ -24,9 +25,8 @@ namespace NRMCNetwork
 	  private:
 		NetworkInterface* socket;
 		queue<Message*> msgSendQueue;
-		queue<Message*> msgRecvQueue;
-		bool run;
-		pthread_t mdsThread;
+		volatile bool run;
+		thread mdsThread;
 	  // Operations
 	  public:
 		~MessageDeliverySystem (  );
@@ -39,6 +39,7 @@ namespace NRMCNetwork
 	  private:
 		MessageDeliverySystem (  );
 		void handler ( struct sockaddr_in& addr, char* msg );
+		void mds();
 	};
 }
 

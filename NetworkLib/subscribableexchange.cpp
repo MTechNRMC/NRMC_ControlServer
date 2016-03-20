@@ -37,7 +37,9 @@ void SubscribableExchange::updateSubscribers ( const Message& message )
 {
 	for (unsigned int i = 0; i < subscribers.size(); i++)
 	{
-		subscribers[i]->queueMessage(message);
+		// check if the subscriber wants the message
+		if(subscribers[i]->subscriberWants(message))
+			subscribers[i]->queueMessage(message);	// if they do queue up the message
 	}
 }
 

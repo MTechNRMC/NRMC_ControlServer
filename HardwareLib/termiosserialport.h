@@ -19,19 +19,18 @@ namespace NRMCHardware
 	public:
 		string getPortName();
 		int getBaudRate();
-		TermiosSerialPort(string portName);
 		TermiosSerialPort(string portName, speed_t baudRate);
 		TermiosSerialPort(string portName, speed_t baudRate, tcflag_t controlFlags);
 		virtual ~TermiosSerialPort();
-		char* read();
+		char* readBytes();
 		string readLine();
-		char* read(int size);
+		char* readBytes(int size);
 		string readLine(char terminator);
-		void write(char* message);
-		void write(char* message, int size);
+		void writeBytes(char* message);
+		void writeBytes(char* message, int size);
 		void writeLine(string line);
 		void writeLine(string line, char terminator);
-		bool close();
+		bool closePort();
 	};
 }
 #endif

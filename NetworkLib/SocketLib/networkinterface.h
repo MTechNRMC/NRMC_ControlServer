@@ -22,8 +22,8 @@ namespace Socket
 		virtual bool connect ( string addr ) = 0;
 		virtual void close (  ) = 0;
 		virtual void clearError (  ) = 0;
-		virtual bool send ( char* msg ) = 0;
-		virtual bool send ( char* msg, string ip ) = 0;
+		virtual bool send (const char* msg ) = 0;
+		virtual bool send (const char* msg, string ip ) = 0;
 		virtual bool startReceive ( void (*handler)(struct sockaddr_in&, char*) ) = 0;
 		virtual bool stopReceive (  ) = 0;
 		virtual char* receive (  ) = 0;

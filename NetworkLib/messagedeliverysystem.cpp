@@ -125,7 +125,7 @@ void MessageDeliverySystem::handler ( struct sockaddr_in& addr, char* msg )
 	// check if it was a ping
 	if (tmpMsg != 0)
 	{
-		updateSubscribers(tmpMsg);	// if not update the subscribers
+		updateSubscribers(*tmpMsg);	// if not update the subscribers
 		delete tmpMsg;				// clean up
 	}
 }
@@ -139,9 +139,8 @@ void MessageDeliverySystem::mds()
 			Message* tmpMsg = msgSendQueue.front();
 			msgSendQueue.pop();
 
-			// get the ip and send the message
-			string ip = inet_ntoa(tmpMsg->getAddress().sin_addr);
-			socket->send(tmpMsg->getMessage(), ip);
+			// send the message
+			socket->send(tmpMsg->getMessage(), inet_ntoa(tmpMsg->getAddress().sin_addr));
 
 			delete tmpMsg;
 		}

@@ -12,10 +12,10 @@ namespace NRMCHardware
 	  // Attributes
 	  // Operations
 	  public:
-		PeripheralInterface (  )	{};
-		~PeripheralInterface (  )	{};
-		SmrtPeripheral* getPeripheral ( PeripheralType type, bool forceConnect = false) = 0;
-		void returnPeripheral ( Peripheral& peripheral ) = 0;
+		HardwareInterface(  ){}
+		virtual ~HardwareInterface(  ){}
+		virtual SmrtPeripheral* getPeripheral ( PeripheralType type, bool forceConnect = false) = 0;
+		virtual void returnPeripheral ( Peripheral& peripheral ) = 0;
 	};
 }
 

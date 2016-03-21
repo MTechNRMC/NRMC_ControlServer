@@ -98,12 +98,12 @@ bool UDP_Sock::connect ( string addr )
 	defaultAddr = addr;
 }
 
-bool UDP_Sock::send ( char* msg )
+bool UDP_Sock::send (const char* msg )
 {
 	return send(msg, defaultAddr);
 }
 
-bool UDP_Sock::send ( char* msg, string ip )
+bool UDP_Sock::send (const char* msg, string ip )
 {
 	// set up the basic address
 	sockaddr_in dst;
@@ -121,7 +121,7 @@ bool UDP_Sock::send ( char* msg, string ip )
 	return send(msg, &dst);
 }
 
-bool UDP_Sock::send ( char* msg, const sockaddr_in& addr )
+bool UDP_Sock::send (const char* msg, const sockaddr_in& addr )
 {
 	if (sendto(sct, msg, sizeof(msg), 0, (sockaddr*)addr, sizeof(addr)) < 0)
 	{

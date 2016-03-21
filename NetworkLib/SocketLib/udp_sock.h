@@ -44,9 +44,9 @@ namespace Socket
 		~UDP_Sock();
 		void close();
 		bool connect(string addr);
-		bool send(char* msg);
-		bool send(char* msg, string ip);
-		bool send(char* msg, const sockaddr_in& addr);
+		bool send(const char* msg);
+		bool send(const char* msg, string ip);
+		bool send(const char* msg, const sockaddr_in& addr);
 		bool startReceive(void(*handler)(sockaddr_in&, char*));
 		bool stopReceive();
 		char* receive(sockaddr_in& msgAddr);

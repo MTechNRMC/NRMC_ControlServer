@@ -14,16 +14,14 @@ namespace NRMCHardware
 		// Operations
 	public:
 		virtual int getNumOfMotors() = 0;
-		virtual Direction* getDirection() = 0;
 		virtual Direction getDirection(int motor) = 0;
-		virtual double* getSpeed() = 0;
-		virtual double getSpeed(int motor) = 0;
+		virtual double getSpeed(int motor, Direction direction) = 0;
 		virtual void setSpeed(int motor, char speed, Direction direction = both) = 0;
 		virtual void setSpeed(int motor, double speed, Direction direction = both) = 0;
 		virtual void setDirectionAll(Direction direction) = 0;
 		virtual void setDirection(int motor, Direction direction) = 0;
-		MotorController();
-		~MotorController();
+		MotorController() {};
+		virtual ~MotorController() {};
 		virtual void allStop() = 0;
 	};
 }

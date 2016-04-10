@@ -1,8 +1,6 @@
 #ifndef PERIPHERALTYPE_H
 #define PERIPHERALTYPE_H
 
-#include "peripheral.h"
-
 namespace NRMCHardware
 {
 	// Enum

@@ -39,7 +39,7 @@ void SubscribableExchange::updateSubscribers ( const Message& message )
 	{
 		// check if the subscriber wants the message
 		if(subscribers[i]->subscriberWants(message))
-			subscribers[i]->queueMessage(message);	// if they do queue up the message
+			subscribers[i]->queueMessage(*message.clone());	// if they do queue up a new message
 	}
 }
 

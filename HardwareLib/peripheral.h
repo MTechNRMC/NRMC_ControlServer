@@ -16,7 +16,7 @@ namespace NRMCHardware
 	  // Operations
 	  public:
 		Peripheral (  ){};
-		~Peripheral (  ){};
+		virtual ~Peripheral (  ){};
 		virtual PeripheralType getType (  ) = 0;
 		virtual string getConnectedPort(  ) = 0;
 	};

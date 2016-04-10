@@ -1,6 +1,6 @@
 #Macros to specify compiler, compiler/linking flags, target file
 C++  = g++
-CFLAGS = -Wall -m32 -std=c++11 -pthread
+CFLAGS = -Wall -m32 -std=c++11
 AR = ar
 ARFLAGS = rvs
 LD = g++

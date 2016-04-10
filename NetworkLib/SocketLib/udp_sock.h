@@ -49,6 +49,7 @@ namespace Socket
 		bool send(const char* msg, const sockaddr_in& addr);
 		bool startReceive(void(*handler)(sockaddr_in&, char*));
 		bool stopReceive();
+		char* receive (  );
 		char* receive(sockaddr_in& msgAddr);
 	protected:
 		void receive(void(*handler)(sockaddr_in&, char*));

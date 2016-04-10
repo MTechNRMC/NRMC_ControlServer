@@ -1,3 +1,7 @@
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #include "messagedeliverysystem.h"
 #include "opcodeonlymessage.h"
 #include "motordir16message.h"
@@ -7,11 +11,11 @@
 
 using namespace NRMCNetwork;
 
-static MessageDeliverySystem& MessageDeliverySystem::getInstance (  )
+MessageDeliverySystem& MessageDeliverySystem::getInstance (  )
 {
 	static MessageDeliverySystem instance;
 	
-	return *instance;
+	return instance;
 }
 
 MessageDeliverySystem& MessageDeliverySystem::operator+=( NetworkInterface* interface )
@@ -33,7 +37,9 @@ void MessageDeliverySystem::attachNetworkInterface( NetworkInterface* interface 
 
 void MessageDeliverySystem::queueMessage ( Message* message )
 {
+	queueLock.lock();
 	msgSendQueue.push(message);
+	queueLock.unlock();
 }
 
 bool MessageDeliverySystem::startSystem (  )
@@ -44,7 +50,7 @@ bool MessageDeliverySystem::startSystem (  )
 	try
 	{
 		run = true;
-		mdsThread = new thread(mds);
+		mdsThread = new thread(&MessageDeliverySystem::mds, this);
 	}
 	catch (exception& e)
 	{
@@ -93,7 +99,8 @@ MessageDeliverySystem::~MessageDeliverySystem (  )
 		socket = 0;
 	}
 	while(!msgSendQueue.empty()){
-		Message* temp = msgSendQueue.pop();
+		Message* temp = msgSendQueue.front();
+		msgSendQueue.pop();
 		delete temp;
 		temp = 0;
 	}
@@ -102,7 +109,7 @@ MessageDeliverySystem::~MessageDeliverySystem (  )
 void MessageDeliverySystem::handler ( struct sockaddr_in& addr, char* msg )
 {
 	Message* tmpMsg = 0;
-	switch (msg[0])
+	switch ((int)msg[0])
 	{
 	case 0x00:	// ping
 		queueMessage(new OpcodeOnlyMessage(0x00, addr));	// send response
@@ -134,10 +141,12 @@ void MessageDeliverySystem::mds()
 {
 	while (run)
 	{
+		queueLock.lock();
 		while (!msgSendQueue.empty())
 		{
 			Message* tmpMsg = msgSendQueue.front();
 			msgSendQueue.pop();
+			queueLock.unlock();
 
 			// send the message
 			socket->send(tmpMsg->getMessage(), inet_ntoa(tmpMsg->getAddress().sin_addr));

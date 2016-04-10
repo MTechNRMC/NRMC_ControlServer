@@ -24,3 +24,9 @@ TEST_F(OpcodeOnlyTest, opcodeToRaw)
 	NRMCNetwork::OpcodeOnlyMessage msg(10, test);
 	ASSERT_EQ(10, msg.getMessage()[0]);
 }
+
+TEST_F(OpcodeOnlyTest, exceptionCheck)
+{
+	struct sockaddr_in test; 
+	ASSERT_ANY_THROW(NRMCNetwork::OpcodeOnlyMessage msg((char*)0, test));
+}

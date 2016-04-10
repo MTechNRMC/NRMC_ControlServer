@@ -5,6 +5,8 @@
 
 using std::vector;
 using std::runtime_error;
+using std::invalid_argument;
+
 using namespace NRMCHardware;
 
 string NRMCHardware::TermiosSerialPort::getPortName (  )
@@ -124,15 +126,36 @@ TermiosSerialPort::TermiosSerialPort ( string portName, speed_t baudRate )
 
 TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_t controlFlags)
 {
-	this->ttyFd = open(portName.c_str(), O_RDWR|O_NONBLOCK);
+	static const int controlMask = ~(CSIZE | CSTOPB | PARENB | PARODD);
+
+	termios config;
+
+	this->ttyFd = open(portName.c_str(), O_RDWR|O_NOCTTY|O_NONBLOCK);
 	this->portName = portName;
 	this->baudRate = baudRate;
 	this->controlFlags = controlFlags;
 
-	termios tty;
-	memset(&tty, 0, sizeof(tty));
-	if(tcgetattr(this->ttyFd, &tty) != 0)
-		throw runtime_error("");
+	memset(&config, 0, sizeof(config));
+
+	if(ttyFd == -1)
+		throw runtime_error("Failed to open: "+portName);
+
+	if(!isatty(ttyFd))
+		throw invalid_argument(portName+" is not a valid serial port");
+
+	if(tcgetattr(ttyFd, &config))
+		throw runtime_error("Failed to get the configuration for: "+portName);
+
+	config.c_cflag &= controlMask;	// clear the size stop and parity flags
+	config.c_cflag |= controlFlags;	// set the control flags
+
+	// set baud
+	if(cfsetispeed(&config, baudRate) < 0 || cfsetospeed(&config, baudRate))
+		throw runtime_error("Error setting baud rate for: "+portName);
+
+	// apply the configuration
+	if(tcsetattr(ttyFd, TCSAFLUSH, &config) < 0)
+		throw runtime_error("Unable to apply configuration to: "+portName);
 }
 
 TermiosSerialPort::~TermiosSerialPort (  )

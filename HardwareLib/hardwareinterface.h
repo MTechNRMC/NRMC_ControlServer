@@ -1,6 +1,7 @@
 #ifndef HARDWAREINTERFACE_H
 #define HARDWAREINTERFACE_H
 
+#include "smrtperipheral.h"
 #include "peripheraltype.h"
 
 namespace NRMCHardware

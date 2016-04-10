@@ -3,16 +3,16 @@
 
 #include <queue>
 #include <thread>
+#include <mutex>
 #include "message.h"
 #include "SocketLib/networkinterface.h"
 #include "mds_interface.h"
-#include "systeminterface.h"
 #include "subscribableexchange.h"
-#include "notimplementedexception.h"
 #include "../Util/systeminterface.h"
 
 using std::queue;
 using std::thread;
+using std::mutex;
 using Socket::NetworkInterface;
 using NRMCUtil::SystemInterface;
 
@@ -23,10 +23,11 @@ namespace NRMCNetwork
 	{
 	  // Attributes
 	  private:
+		mutex queueLock;
 		NetworkInterface* socket;
 		queue<Message*> msgSendQueue;
 		volatile bool run;
-		thread mdsThread;
+		thread* mdsThread;
 	  // Operations
 	  public:
 		~MessageDeliverySystem (  );

@@ -30,7 +30,7 @@ void UDP_Sock::clearError (  )
 
 UDP_Sock::UDP_Sock ( int port, bool multicast)
 {
-	UDP_Sock(port, DEFAULT_TIMEOUT, multicast, addressFamily);
+	UDP_Sock(port, DEFAULT_TIMEOUT, multicast);
 }
 
 UDP_Sock::UDP_Sock ( int port, int timeout, bool multicast)
@@ -112,7 +112,7 @@ bool UDP_Sock::send (const char* msg, string ip )
 	dst.sin_port = htons(port);
 
 	// translate the ip string to the binary format
-	if (inet_pton(ADDR_FAMILY, ip.c_str, &(dst.sin_addr) < 0)
+	if (inet_pton(ADDR_FAMILY, ip.c_str, &(dst.sin_addr)) < 0)
 	{
 		lastException = errorNumToException(errno);
 		return false;	// failed
@@ -146,7 +146,7 @@ bool UDP_Sock::startReceive ( void (*handler)(sockaddr_in&, char*) )
 		// set to transmit
 		rx = true;
 		// create the thread
-		rcvThread = new thread(receive,handler);
+		rcvThread = new thread(UDP_Sock::receive,this,handler);
 	}
 	catch (exception& e)
 	{
@@ -194,6 +194,11 @@ bool UDP_Sock::stopReceive (  )
 	return true;
 }
 
+char* UDP_Sock::receive()
+{
+	return 0;
+}
+
 char* UDP_Sock::receive ( sockaddr_in& msgAddr )
 {
 	int msgLength = 0;
@@ -202,7 +207,7 @@ char* UDP_Sock::receive ( sockaddr_in& msgAddr )
 
 	memset(buffer, 0, sizeof(buffer));
 
-	if ((msgLength = recvfrom(sct, buffer, sizeof(buffer), 0, (sockaddr*)msgAddr, sizeof(msgAddr)) < 0)
+	if ((msgLength = recvfrom(sct, buffer, sizeof(buffer), 0, (sockaddr*)msgAddr, sizeof(msgAddr))) < 0)
 		return 0;	// no message received
 
 	msg = new char[msgLength];
@@ -223,7 +228,7 @@ void UDP_Sock::receive ( void (*handler)(sockaddr_in&, char*) )
 	{
 		// clear the address
 		memset((char *)&msgAddr, 0, sizeof(msgAddr));
-		msg = receive(&msgAddr);
+		msg = receive(msgAddr);
 
 		//check if a message was received
 		if (msg != 0)

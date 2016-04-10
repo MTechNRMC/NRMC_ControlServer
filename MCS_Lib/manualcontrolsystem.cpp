@@ -1,18 +1,39 @@
+#include <stdexcept>
+
 #include "manualcontrolsystem.h"
+
+#include "../HardwareLib/direction.h"
+#include "../HardwareLib/smrtperipheral.h"
+
+#include "../NetworkLib/subscribableexchange.h"
 
 #define DELAY 100	// 0.1 second delay
 
 using namespace NRMC_MCS;
 
+using NRMCHardware::Direction;
+using NRMCHardware::SmrtPeripheral;
+using NRMCHardware::PeripheralType;
+using NRMCNetwork::SubscribableExchange;
+
+using std::exception;
+using std::invalid_argument;
+
 ManualControlSystem::ManualControlSystem ( MDS_Interface& networkInterface, HardwareInterface& hardwareInterface )
 {
 	this->manualControl = true;
 	this->run = false;
-	this->networkInterface = networkInterface;
-	this->hardwareInterface = hardwareInterface;
+	this->networkInterface = &networkInterface;
+	this->hardwareInterface = &hardwareInterface;
 	this->mcsThread = 0;
 
-	((SubscribableExchange)networkInterface).subscribe(*this);
+	SubscribableExchange* exchange = dynamic_cast<SubscribableExchange*>(&networkInterface);
+
+	// check if the cast was successful
+	if(exchange == 0)
+		throw invalid_argument("The passed network interface does not support SubscribaleExchange");
+
+	exchange->subscribe(*this);
 }
 
 ManualControlSystem::~ManualControlSystem (  )
@@ -25,6 +46,9 @@ ManualControlSystem::~ManualControlSystem (  )
 		delete msgQueue.front();
 		msgQueue.pop();
 	}
+
+	// unsubscribe
+	dynamic_cast<SubscribableExchange*>(networkInterface)->unsubscribe(*this);
 }
 
 void ManualControlSystem::queueMessage ( const Message& message )
@@ -55,7 +79,7 @@ bool NRMC_MCS::ManualControlSystem::startSystem()
 	try
 	{
 		run = true;
-		mcsThread = new thread(mcs);
+		mcsThread = new thread(&ManualControlSystem::mcs, this);
 	}
 	catch (exception& e)
 	{
@@ -99,10 +123,10 @@ void NRMC_MCS::ManualControlSystem::mcs()
 			switch (msgQueue.front()->getOpcode())
 			{
 			case 0x01:
-				move((MotorDir16Message*)msgQueue.front(), (MotorController*)controller->peripheral());
+				move((MotorDir16Message*)msgQueue.front(), (MotorController*)controller->getPeripheral());
 				break;
 			case 0x02:
-				setThrottle((SetSpeedByteMessage*)msgQueue.front(), (MotorController*)controller->peripheral());
+				setThrottle((SetSpeedByteMessage*)msgQueue.front(), (MotorController*)controller->getPeripheral());
 				break;
 			case 0xFE:
 				manualControl = false;

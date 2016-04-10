@@ -3,37 +3,28 @@
 
 #include <queue>
 #include <thread>
-#include <stdexcept>
 
 #include "../NetworkLib/exchangesubscriber.h"
 #include "../NetworkLib/mds_interface.h"
-#include "../NetworkLib/subscribableexchange.h"
 #include "../NetworkLib/motordir16message.h"
 #include "../NetworkLib/setspeedbytemessage.h"
 
 #include "../HardwareLib/hardwareinterface.h"
-#include "../HardwareLib/smrtperipheral.h"
 #include "../HardwareLib/motorcontroller.h"
-#include "../HardwareLib/direction.h"
 
 #include "../Util/systeminterface.h"
 
 using std::queue;
 using std::thread;
-using std::exception;
 
 using NRMCUtil::SystemInterface;
 using NRMCNetwork::ExchangeSubscriber;
 using NRMCNetwork::MDS_Interface;
 using NRMCNetwork::SetSpeedByteMessage;
-using NRMCNetwork::SubscribableExchange;
 using NRMCNetwork::Message;
 using NRMCNetwork::MotorDir16Message;
 using NRMCHardware::HardwareInterface;
-using NRMCHardware::SmrtPeripheral;
-using NRMCHardware::PeripheralType;
 using NRMCHardware::MotorController;
-using NRMCHardware::Direction;
 
 
 namespace NRMC_MCS

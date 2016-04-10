@@ -1,5 +1,5 @@
-#ifndef OPCODEONLYMESSAGE_H
-#define OPCODEONLYMESSAGE_H
+#ifndef SETSPEEDBYTEMESSAGE_H
+#define SETSPEEDBYTEMESSAGE_H
 
 #include "message.h"
 

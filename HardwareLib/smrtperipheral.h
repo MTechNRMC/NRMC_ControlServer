@@ -7,6 +7,8 @@
 
 namespace NRMCHardware
 {
+	class HardwareInterface;
+
 	class SmrtPeripheral
 	{
 		// Associations

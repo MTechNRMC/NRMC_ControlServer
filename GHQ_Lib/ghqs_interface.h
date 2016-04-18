@@ -4,6 +4,10 @@
 #include "ghqs_observer.h"
 #include "device.h"
 
+#include "../NetworkLib/message.h"
+
+using NRMCNetwork::Message;
+
 namespace NRMC_GHQS
 {
 	class GHQS_Interface

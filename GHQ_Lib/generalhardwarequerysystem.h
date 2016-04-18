@@ -1,15 +1,25 @@
 #ifndef GENERALHARDWAREQUERYSYSTEM_H
 #define GENERALHARDWAREQUERYSYSTEM_H
 
+#include <vector>
+#include <thread>
+
 #include "ghqs_observer.h"
 #include "ghqs_interface.h"
 #include "device.h"
 
 #include "../NetworkLib/message.h"
 #include "../NetworkLib/exchangesubscriber.h"
+#include "../NetworkLib/mds_interface.h"
 
+#include "../HardwareLib/hardwareinterface.h"
+
+using std::vector;
+using std::thread;
 using NRMCNetwork::ExchangeSubscriber;
 using NRMCNetwork::Message;
+using NRMCNetwork::MDS_Interface;
+using NRMCHardware::HardwareInterface;
 
 namespace NRMC_GHQS
 {

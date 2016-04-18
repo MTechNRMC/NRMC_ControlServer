@@ -11,7 +11,7 @@ namespace NRMC_GHQS
 		LocalizationLIDAR,
 		Accelerometer,
 		Tachometer,
-		CurrentSensors;
+		CurrentSensors
 	};
 }
 #endif

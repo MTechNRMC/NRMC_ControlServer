@@ -1,6 +1,6 @@
 #Macros to specify compiler, compiler/linking flags, target file
 C++  = g++
-CFLAGS = -Wall -m32 -std=c++11
+CFLAGS = -Wall -std=c++11
 AR = ar
 ARFLAGS = rvs
 LD = g++
@@ -19,7 +19,7 @@ $(ARLIB):	$(OBJS)
 		$(AR) $(ARFLAGS) $(ARLIB) $(OBJS)
 		
 UDP_Sock.o:				networkinterface.h udp_sock.h udp_sock.cpp
-		$(C++) $(CFLAGS) -c udp_sock.cpp
+		$(C++) $(CFLAGS) -c udp_sock.cpp -o UDP_Sock.o
 
 clean:
 		rm -f $(OBJS) $(TSTEXEC) $(ARLIB) $(TSTOBJS)

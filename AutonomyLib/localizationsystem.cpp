@@ -17,8 +17,10 @@ LocalizationSystem::~LocalizationSystem (  )
 {
 }
 
-void LocalizationSystem::notify (  )
+void LocalizationSystem::subscribe ( LocalizationObserver& subscriber )
 {
-	throw bad_function_call();
 }
 
+void LocalizationSystem::unsubscribe ( LocalizationObserver& subscriber )
+{
+}

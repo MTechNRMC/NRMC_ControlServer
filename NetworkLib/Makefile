@@ -49,8 +49,8 @@ Tests/opcodeonlytest.o:			Tests/opcodeonlytest.cpp opcodeonlymessage.h
 		$(C++) $(CTESTFLAGS) $(GTESTFLAGS) -c Tests/opcodeonlytest.cpp $(TESTINCLUDES) -o Tests/opcodeonlytest.o
 		
 Tests/message16DirTest.o:   Tests/motorDir16Test.cpp motordir16message.h
-                $(C++) $(CTESTFLAGS) $(GTESTFLAGS) -c Tests/motorDir16Test.cpp $(TESTINCLUDES) -o Tests/message16DirTest.o
+		$(C++) $(CTESTFLAGS) $(GTESTFLAGS) -c Tests/motorDir16Test.cpp $(TESTINCLUDES) -o Tests/message16DirTest.o
 
 Tests/setspeedbytemessagetest.o:                Tests/setspeedbytemessagetest.cpp setspeedbytemessage.h
-                $(C++) $(CTESTFLAGS) $(GTESTFLAGS) -c Tests/setspeedbytemessagetest.cpp $(TESTINCLUDES) -o Tests/setspeedbytemessagetest.o
+		$(C++) $(CTESTFLAGS) $(GTESTFLAGS) -c Tests/setspeedbytemessagetest.cpp $(TESTINCLUDES) -o Tests/setspeedbytemessagetest.o
 

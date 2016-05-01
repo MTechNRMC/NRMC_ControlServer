@@ -28,7 +28,7 @@ MessageDeliverySystem& MessageDeliverySystem::operator+=( NetworkInterface* inte
 void MessageDeliverySystem::attachNetworkInterface( NetworkInterface* interface )
 {
 	if(socket != 0){
-		socket->close();
+		socket->closeSocket();
 		delete socket;
 		socket = 0;
 	}
@@ -94,7 +94,7 @@ MessageDeliverySystem::~MessageDeliverySystem (  )
 	stopSystem();
 	
 	if(socket != 0){
-		socket->close();
+		socket->closeSocket();
 		delete socket;
 		socket = 0;
 	}
@@ -149,7 +149,7 @@ void MessageDeliverySystem::mds()
 			queueLock.unlock();
 
 			// send the message
-			socket->send(tmpMsg->getMessage(), inet_ntoa(tmpMsg->getAddress().sin_addr));
+			socket->sendMsg(tmpMsg->getMessage(), inet_ntoa(tmpMsg->getAddress().sin_addr));
 
 			delete tmpMsg;
 		}

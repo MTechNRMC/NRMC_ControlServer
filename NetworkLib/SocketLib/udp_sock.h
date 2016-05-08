@@ -51,6 +51,7 @@ namespace Socket
 		void receiveMsg(void(*handler)(sockaddr_in&, char*, int));
 	private:
 		runtime_error* errorNumToException(int err);
+		void init(int port, int timeout, bool multicast, sockaddr_in& sctInterface);
 	};
 }
 #endif

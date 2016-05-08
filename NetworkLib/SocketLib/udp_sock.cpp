@@ -37,10 +37,8 @@ void UDP_Sock::clearError (  )
 	lastException = 0;
 }
 
-UDP_Sock::UDP_Sock ( int port, bool multicast)
-{
-	UDP_Sock(port, DEFAULT_TIMEOUT, multicast);
-}
+UDP_Sock::UDP_Sock ( int port, bool multicast) : UDP_Sock(port, DEFAULT_TIMEOUT, multicast)
+{}
 
 UDP_Sock::UDP_Sock ( int port, int timeout, bool multicast)
 {
@@ -51,42 +49,16 @@ UDP_Sock::UDP_Sock ( int port, int timeout, bool multicast)
 	defualtInterface.sin_addr.s_addr = htonl(INADDR_ANY);
 	defualtInterface.sin_port = htons(port);
 
-
-	UDP_Sock(port, timeout, multicast, defualtInterface);
+	init(port, timeout, multicast, defualtInterface);
 }
 
 UDP_Sock::UDP_Sock(int port, int timeout, bool multicast, sockaddr_in& sctInterface)
 {
-	// set the timeout
-	timeval timeoutVal;
-	timeoutVal.tv_sec = timeout/1000;
-	timeoutVal.tv_usec = (timeout%1000)*1000;
-
-	// set the attributes
-	this->port = port;
-	this->timeout = timeout;
-	this->multicast = multicast;
-	this->rx = false;
-
-	// open the socket
-	if ((sct = socket(ADDR_FAMILY, SOCK_DGRAM, 0)) < 0)
-		throw errorNumToException(errno);
-
-	// check if the timeout should be set
-	if(timeout > 0)
-		// set the receive timeout
-		if (setsockopt(sct, SOL_SOCKET, SO_RCVTIMEO, &timeoutVal, sizeof(timeoutVal)) < 0)
-			throw errorNumToException(errno);	// timeout failed to set
-
-	// bind the socket
-	if (bind(sct, (sockaddr*)&sctInterface, sizeof(sctInterface)) < 0)
-		throw errorNumToException(errno);
+	init(port, timeout, multicast, sctInterface);
 }
 
-UDP_Sock::UDP_Sock ( const UDP_Sock& socket )
-{
-	UDP_Sock(socket.port, socket.timeout, socket.multicast);
-}
+UDP_Sock::UDP_Sock ( const UDP_Sock& socket ) : UDP_Sock(socket.port, socket.timeout, socket.multicast)
+{}
 
 UDP_Sock::~UDP_Sock (  )
 {
@@ -275,4 +247,32 @@ runtime_error* UDP_Sock::errorNumToException(int err)
 	default:
 		return new runtime_error("An unknown error has occured");
 	}
+}
+
+void UDP_Sock::init(int port, int timeout, bool multicast, sockaddr_in& sctInterface)
+{
+	// set the timeout
+	timeval timeoutVal;
+	timeoutVal.tv_sec = timeout/1000;
+	timeoutVal.tv_usec = (timeout%1000)*1000;
+
+	// set the attributes
+	this->port = port;
+	this->timeout = timeout;
+	this->multicast = multicast;
+	this->rx = false;
+
+	// open the socket
+	if ((sct = socket(ADDR_FAMILY, SOCK_DGRAM, 0)) < 0)
+		throw errorNumToException(errno);
+
+	// check if the timeout should be set
+	if(timeout > 0)
+		// set the receive timeout
+		if (setsockopt(sct, SOL_SOCKET, SO_RCVTIMEO, &timeoutVal, sizeof(timeoutVal)) < 0)
+			throw errorNumToException(errno);	// timeout failed to set
+
+	// bind the socket
+	if (bind(sct, (sockaddr*)&sctInterface, sizeof(sctInterface)) < 0)
+		throw errorNumToException(errno);
 }

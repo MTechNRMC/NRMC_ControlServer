@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include <sys/time.h>
 #include <errno.h>
 #include <cstring>
 
@@ -58,15 +59,14 @@ UDP_Sock::UDP_Sock(int port, int timeout, bool multicast, sockaddr_in& sctInterf
 {
 	// set the timeout
 	timeval timeoutVal;
-	timeoutVal.tv_sec = 0;
-	timeoutVal.tv_usec = timeout*1000;
+	timeoutVal.tv_sec = timeout/1000;
+	timeoutVal.tv_usec = (timeout%1000)*1000;
 
 	// set the attributes
 	this->port = port;
 	this->timeout = timeout;
 	this->multicast = multicast;
 	this->rx = false;
-	this->rcvThread = 0;
 
 	// open the socket
 	if ((sct = socket(ADDR_FAMILY, SOCK_DGRAM, 0)) < 0)
@@ -108,12 +108,12 @@ bool UDP_Sock::connect ( string addr )
 	return true;
 }
 
-bool UDP_Sock::sendMsg (const char* msg )
+bool UDP_Sock::sendMsg (const char* msg, unsigned int size)
 {
-	return sendMsg(msg, defaultAddr);
+	return sendMsg(msg, size, defaultAddr);
 }
 
-bool UDP_Sock::sendMsg (const char* msg, string ip )
+bool UDP_Sock::sendMsg (const char* msg, unsigned int size, string ip)
 {
 	// set up the basic address
 	sockaddr_in dst;
@@ -128,12 +128,12 @@ bool UDP_Sock::sendMsg (const char* msg, string ip )
 		return false;	// failed
 	}
 
-	return sendMsg(msg, dst);
+	return sendMsg(msg, size, dst);
 }
 
-bool UDP_Sock::sendMsg (const char* msg, const sockaddr_in& addr )
+bool UDP_Sock::sendMsg (const char* msg, unsigned int size, const sockaddr_in& addr)
 {
-	if (sendto(sct, msg, sizeof(msg), 0, (sockaddr*)&addr, sizeof(addr)) < 0)
+	if (sendto(sct, msg, size, 0, (sockaddr*)&addr, sizeof(addr)) < 0)
 	{
 		lastException = errorNumToException(errno);
 		return false;	// failed
@@ -142,7 +142,7 @@ bool UDP_Sock::sendMsg (const char* msg, const sockaddr_in& addr )
 	return true;
 }
 
-bool UDP_Sock::startReceive ( void (*handler)(sockaddr_in&, char*) )
+bool UDP_Sock::startReceive ( void (*handler)(sockaddr_in&, char*, int) )
 {
 	// check if the sock is already receiving
 	if (rx == true)
@@ -155,9 +155,9 @@ bool UDP_Sock::startReceive ( void (*handler)(sockaddr_in&, char*) )
 	{
 		// set to transmit
 		rx = true;
-		void (UDP_Sock::*rcvFunc)(void (*handler)(sockaddr_in&, char*)) = &UDP_Sock::receiveMsg;
+		void (UDP_Sock::*rcvFunc)(void (*handler)(sockaddr_in&, char*, int)) = &UDP_Sock::receiveMsg;
 		// create the thread
-		rcvThread = new thread(rcvFunc,this,handler);
+		rcvThread = thread(rcvFunc,this,handler);
 	}
 	catch (exception& e)
 	{
@@ -176,7 +176,7 @@ bool UDP_Sock::startReceive ( void (*handler)(sockaddr_in&, char*) )
 bool UDP_Sock::stopReceive (  )
 {
 	// check if receive has been started
-	if (!rx && rcvThread == 0)
+	if (!rx)
 		return true;	// already stopped so return true
 
 	// set the receive flag to false to stop receiving
@@ -184,14 +184,7 @@ bool UDP_Sock::stopReceive (  )
 
 	try
 	{
-		// wait for the timeout*2 to allow the thread to exit gracefully
-		std::this_thread::sleep_for(std::chrono::milliseconds(timeout * 2));
-
-		// delete the thread
-		if(rcvThread!=0)
-			delete rcvThread;
-
-		rcvThread = 0;
+		rcvThread.join();
 	}
 	catch (exception& e)
 	{
@@ -205,12 +198,19 @@ bool UDP_Sock::stopReceive (  )
 	return true;
 }
 
-char* UDP_Sock::receiveMsg()
+char* UDP_Sock::receiveMsg(int& size)
 {
-	return 0;
+	sockaddr_in msgAddr;
+
+	memset((char*)&msgAddr, 0, sizeof(msgAddr));
+	msgAddr.sin_family = ADDR_FAMILY;
+	msgAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	msgAddr.sin_port = htons(port);
+
+	return receiveMsg(msgAddr, size);
 }
 
-char* UDP_Sock::receiveMsg ( sockaddr_in& msgAddr )
+char* UDP_Sock::receiveMsg ( sockaddr_in& msgAddr, int& size )
 {
 	int msgLength = 0;
 	char buffer[BUFFER_SIZE];
@@ -232,10 +232,13 @@ char* UDP_Sock::receiveMsg ( sockaddr_in& msgAddr )
 	return msg;
 }
 
-void UDP_Sock::receiveMsg ( void (*handler)(sockaddr_in&, char*) )
+void UDP_Sock::receiveMsg ( void (*handler)(sockaddr_in&, char*, int) )
 {
 	char* msg;
 	sockaddr_in msgAddr;
+
+	int size = 0;
+
 	memset((char*)&msgAddr, 0, sizeof(msgAddr));
 	msgAddr.sin_family = ADDR_FAMILY;
 	msgAddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -243,9 +246,9 @@ void UDP_Sock::receiveMsg ( void (*handler)(sockaddr_in&, char*) )
 
 	while (rx)
 	{
-		msg = receiveMsg(msgAddr);
+		msg = receiveMsg(msgAddr, size);
 		if (msg != 0)
-			handler(msgAddr, msg);	// pass the info to the handler
+			handler(msgAddr, msg, size);	// pass the info to the handler
 	}
 }
 

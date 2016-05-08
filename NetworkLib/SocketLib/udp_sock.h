@@ -15,7 +15,8 @@ using std::runtime_error;
 
 namespace Socket
 {
-	class UDP_Sock : public NetworkInterface {
+	class UDP_Sock : public NetworkInterface
+	{
 		// Associations
 		// Attributes
 	private:
@@ -23,7 +24,7 @@ namespace Socket
 		bool multicast;
 		sockaddr_in defaultAddr;
 		exception* lastException;
-		thread*  rcvThread;
+		thread rcvThread;
 		volatile bool rx;
 		// Operations
 	public:
@@ -39,15 +40,15 @@ namespace Socket
 		~UDP_Sock();
 		void closeSocket();
 		bool connect(string addr);
-		bool sendMsg(const char* msg);
-		bool sendMsg(const char* msg, string ip);
-		bool sendMsg(const char* msg, const sockaddr_in& addr);
-		bool startReceive(void(*handler)(sockaddr_in&, char*));
+		bool sendMsg(const char* msg, unsigned int size);
+		bool sendMsg(const char* msg, unsigned int size, string ip);
+		bool sendMsg(const char* msg, unsigned int size, const sockaddr_in& addr);
+		bool startReceive(void(*handler)(sockaddr_in&, char*, int));
 		bool stopReceive();
-		char* receiveMsg (  );
-		char* receiveMsg(sockaddr_in& msgAddr);
+		char* receiveMsg ( int& size );
+		char* receiveMsg(sockaddr_in& msgAddr, int& size);
 	protected:
-		void receiveMsg(void(*handler)(sockaddr_in&, char*));
+		void receiveMsg(void(*handler)(sockaddr_in&, char*, int));
 	private:
 		runtime_error* errorNumToException(int err);
 	};

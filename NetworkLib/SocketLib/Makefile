@@ -1,6 +1,6 @@
 #Macros to specify compiler, compiler/linking flags, target file
 C++  = g++
-CFLAGS = -Wall -std=c++11
+CFLAGS = -Wall -std=c++11 -pthread	#need if undefined reference to 'pthread_create' may need -lpthread
 AR = ar
 ARFLAGS = rvs
 LD = g++
@@ -9,7 +9,7 @@ LIBS =
 OBJS = UDP_Sock.o
 TSTOBJS = 
 ARLIB = SocketLib.a
-TSTEXEC = 
+TSTEXEC = Tests/TestClient
 
 #Rules to create target file Driver
 # If any files on line with colon are modified, then recompile the object file
@@ -26,5 +26,5 @@ clean:
 
 test:		$(TSTEXEC)
 
-$(TSTEXEC):	$(ARLIB) $(TSTOBJS)
-		$(LD) $(LDFLAGS) -o $(TSTEXEC) $(TSTOBJS) $(ARLIB)
+$(TSTEXEC):	$(ARLIB) 
+		$(C++) $(CFLAGS) -o $(TSTEXEC) Tests/UDPSocketTestClient.cpp $(ARLIB)

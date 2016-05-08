@@ -114,15 +114,9 @@ int TermiosSerialPort::getBaudRate (  )
 	}
 }
 
-TermiosSerialPort::TermiosSerialPort ( string portName, speed_t baudRate )
-{
-	tcflag_t defaultFlags = 0;
-
-	// set 8bit no parity with 1 stop bit
-	defaultFlags |= CS8;	// note that by only setting the data size no parity and 1 stop bit are already set as they are 0
-
-	TermiosSerialPort(portName, baudRate, defaultFlags);
-}
+// set port to 8bit no parity with 1 stop bit with specified baudRate
+TermiosSerialPort::TermiosSerialPort ( string portName, speed_t baudRate ) : TermiosSerialPort(portName, baudRate, CS8)
+{}
 
 TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_t controlFlags)
 {

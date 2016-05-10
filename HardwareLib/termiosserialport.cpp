@@ -1,9 +1,7 @@
-#include <vector>
 #include <fcntl.h>
 #include <exception>
 #include "termiosserialport.h"
 
-using std::vector;
 using std::runtime_error;
 using std::invalid_argument;
 
@@ -157,22 +155,16 @@ TermiosSerialPort::~TermiosSerialPort (  )
 	closePort();	// close the serial port
 }
 
-char* TermiosSerialPort::readBytes (  )
+vector<char> TermiosSerialPort::readBytes (  )
 {
 	char byte;
-	char* msg;
 	vector<char> buffer;		// create a vector to store the bytes that are read in
 
 	// read all the data from the buffer in
 	while(read(ttyFd, &byte, 1) > 0)
 		buffer.push_back(byte);
 
-	msg = new char[buffer.size()];
-	// create a copy of the message
-	for(int b=0; b<buffer.size(); b++)
-		msg[b] = buffer[b];
-
-	return msg;
+	return buffer;
 }
 
 string TermiosSerialPort::readLine (  )
@@ -180,13 +172,16 @@ string TermiosSerialPort::readLine (  )
 	readLine('\n');		// default to reading to the newline
 }
 
-char* TermiosSerialPort::readBytes ( int size )
+vector<char> TermiosSerialPort::readBytes ( int size )
 {
 	char* buffer = new char[size];		// create a buffer the size of the bytes that need to be received
 	memset(buffer, 0, size);			// 0 the buffer
 	read(ttyFd, buffer, size);			// read the message
+	vector<char> msg(buffer,size);
+	delete buffer;
+	buffer = 0;
 
-	return buffer;						// return the buffer
+	return msg;							// return the what was read
 }
 
 string TermiosSerialPort::readLine ( char terminator )
@@ -207,9 +202,9 @@ string TermiosSerialPort::readLine ( char terminator )
 	return msg;
 }
 
-void TermiosSerialPort::writeBytes ( char* message )
+void TermiosSerialPort::writeBytes( vector<char>& message )
 {
-	write(ttyFd, message, sizeof(message));
+	writeBytes(&message[0], message.size());
 }
 
 void TermiosSerialPort::writeBytes ( char* message, int size )
@@ -219,7 +214,7 @@ void TermiosSerialPort::writeBytes ( char* message, int size )
 
 void TermiosSerialPort::writeLine ( string line )
 {
-	writeBytes((char*)line.c_str());
+	writeBytes((char*)line.c_str(), line.size());
 }
 
 void TermiosSerialPort::writeLine ( string line, char terminator )

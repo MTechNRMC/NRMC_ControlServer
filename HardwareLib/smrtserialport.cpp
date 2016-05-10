@@ -27,7 +27,7 @@ SmrtSerialPort::~SmrtSerialPort (  )
 
 bool SmrtSerialPort::close (  )
 {
-	closed = factory->closePort(*this);
+	closed = factory->closePort(*serialPort);
 
 	return closed;
 }

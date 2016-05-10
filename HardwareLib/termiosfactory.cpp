@@ -78,7 +78,7 @@ SmrtSerialPort* TermiosFactory::openPort ( bool (*checkConnected)(SerialPortInte
 
 bool TermiosFactory::closePort(SmrtSerialPort& port)
 {
-	bool closed = port.getSerialPort().close();
+	bool closed = port.getSerialPort().closePort();
 
 	if(closed)
 		addPortToPool(port.getSerialPort().getPortName());

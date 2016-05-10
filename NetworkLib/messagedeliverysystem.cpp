@@ -27,12 +27,14 @@ MessageDeliverySystem& MessageDeliverySystem::operator+=( NetworkInterface* inte
 
 void MessageDeliverySystem::attachNetworkInterface( NetworkInterface* interface )
 {
-	if(socket != 0){
+	if(socket != 0)
+	{
 		socket->closeSocket();
 		delete socket;
 		socket = 0;
 	}
 	socket = interface;
+	socket->startReceive(handler);
 }
 
 void MessageDeliverySystem::queueMessage ( Message* message )
@@ -50,7 +52,7 @@ bool MessageDeliverySystem::startSystem (  )
 	try
 	{
 		run = true;
-		mdsThread = new thread(&MessageDeliverySystem::mds, this);
+		mdsThread = thread(&MessageDeliverySystem::mds, this);
 	}
 	catch (exception& e)
 	{
@@ -66,14 +68,7 @@ bool MessageDeliverySystem::stopSystem (  )
 
 	try
 	{
-		// wait the delay *2 to give a chance for a gracefull exit
-		std::this_thread::sleep_for(std::chrono::milliseconds(DELAY * 2));
-
-		// delete the thread
-		if (mdsThread != 0)
-			delete mdsThread;
-
-		mdsThread = 0;
+		mdsThread.join();
 	}
 	catch (exception& e)
 	{
@@ -86,7 +81,6 @@ bool MessageDeliverySystem::stopSystem (  )
 MessageDeliverySystem::MessageDeliverySystem (  )
 {
 	socket = 0;
-	mdsThread = 0;
 }
 
 MessageDeliverySystem::~MessageDeliverySystem (  )
@@ -112,7 +106,7 @@ void MessageDeliverySystem::handler ( struct sockaddr_in& addr, char* msg, int s
 	switch ((int)msg[0])
 	{
 	case 0x00:	// ping
-		queueMessage(new OpcodeOnlyMessage(0x00, addr));	// send response
+		getInstance().queueMessage(new OpcodeOnlyMessage(0x00, addr));	// send response
 		delete[] msg;
 		break;
 	case 0x01:	// move message
@@ -133,7 +127,7 @@ void MessageDeliverySystem::handler ( struct sockaddr_in& addr, char* msg, int s
 	// check if it was a ping
 	if (tmpMsg != 0)
 	{
-		updateSubscribers(*tmpMsg);	// if not update the subscribers
+		getInstance().updateSubscribers(*tmpMsg);	// if not update the subscribers
 		delete tmpMsg;				// clean up
 	}
 }

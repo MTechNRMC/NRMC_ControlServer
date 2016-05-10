@@ -2,7 +2,7 @@
 C++  = g++
 CFLAGS = -Wall -std=c++11 -funsigned-char
 CTESTFLAGS = -g -pthread 
-GTESTFLAGS = -L ../googletest-release-1.7.0/ -l gtest -l gtest_main 
+GTESTFLAGS = -L ../googletest-release-1.7.0/ -l gtest -l gtest_main #-l gmock
 TESTINCLUDES = -I ../googletest-release-1.7.0/include/
 AR = ar
 ARFLAGS = rvs
@@ -10,7 +10,7 @@ LD = g++
 LDFLAGS = 
 LIBS = 
 OBJS = opcodeonlymessage.o motordir16message.o setspeedbytemessage.o subscribableexchange.o messagedeliverysystem.o
-TSTOBJS = Tests/opcodeonlytest.o Tests/message16DirTest.o Tests/setspeedbytemessagetest.o
+TSTOBJS = Tests/opcodeonlytest.o Tests/message16DirTest.o Tests/setspeedbytemessagetest.o #Tests/mdstest.o
 ARLIB = NRMCNetworkLib.a
 TSTEXEC = Tests/networktest
 
@@ -19,6 +19,7 @@ TSTEXEC = Tests/networktest
 all:		$(ARLIB)
 		
 $(ARLIB):	$(OBJS)
+		(cd SocketLib; make all;)
 		$(AR) $(ARFLAGS) $(ARLIB) $(OBJS) $(LIBS)
 		
 opcodeonlymessage.o:		message.h opcodeonlymessage.h opcodeonlymessage.cpp
@@ -37,6 +38,7 @@ messagedeliverysystem.o:	message.h SocketLib/networkinterface.h mds_interface.h 
 		$(C++) $(CFLAGS) -c messagedeliverysystem.cpp
 		
 clean:
+		(cd SocketLib; make clean;)
 		rm -f $(OBJS) $(TSTEXEC) $(ARLIB) $(TSTOBJS)
 
 test:		$(TSTEXEC)
@@ -53,4 +55,8 @@ Tests/message16DirTest.o:   Tests/motorDir16Test.cpp motordir16message.h
 
 Tests/setspeedbytemessagetest.o:                Tests/setspeedbytemessagetest.cpp setspeedbytemessage.h
 		$(C++) $(CTESTFLAGS) $(GTESTFLAGS) -c Tests/setspeedbytemessagetest.cpp $(TESTINCLUDES) -o Tests/setspeedbytemessagetest.o
+		
+#Tests/mdstest.o:                Tests/mdstest.cpp Tests/mocksocket.h Tests/mocksubscriber.h messagedeliverysystem.h
+#		$(C++) $(CTESTFLAGS) $(GTESTFLAGS) -c Tests/mdstest.cpp $(TESTINCLUDES) -o Tests/mdstest.o
+
 

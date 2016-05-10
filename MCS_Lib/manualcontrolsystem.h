@@ -39,7 +39,7 @@ namespace NRMC_MCS
 		MDS_Interface* networkInterface;
 		HardwareInterface* hardwareInterface;
 		queue<Message*> msgQueue;
-		thread* mcsThread;
+		thread mcsThread;
 		// Operations
 	public:
 		ManualControlSystem(MDS_Interface& networkInterface, HardwareInterface& hardwareInterface);

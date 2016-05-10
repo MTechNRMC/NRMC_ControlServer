@@ -25,7 +25,6 @@ ManualControlSystem::ManualControlSystem ( MDS_Interface& networkInterface, Hard
 	this->run = false;
 	this->networkInterface = &networkInterface;
 	this->hardwareInterface = &hardwareInterface;
-	this->mcsThread = 0;
 
 	SubscribableExchange* exchange = dynamic_cast<SubscribableExchange*>(&networkInterface);
 
@@ -79,7 +78,7 @@ bool NRMC_MCS::ManualControlSystem::startSystem()
 	try
 	{
 		run = true;
-		mcsThread = new thread(&ManualControlSystem::mcs, this);
+		mcsThread = thread(&ManualControlSystem::mcs, this);
 	}
 	catch (exception& e)
 	{
@@ -95,14 +94,9 @@ bool NRMC_MCS::ManualControlSystem::stopSystem()
 
 	try
 	{
-		// wait the delay *2 to give a chance for a gracefull exit
-		std::this_thread::sleep_for(std::chrono::milliseconds(DELAY * 2));
 
-		// delete the thread
-		if (mcsThread != 0)
-			delete mcsThread;
+		mcsThread.join();
 
-		mcsThread = 0;
 	}
 	catch (exception& e)
 	{

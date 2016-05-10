@@ -27,7 +27,7 @@ namespace NRMCNetwork
 		NetworkInterface* socket;
 		queue<Message*> msgSendQueue;
 		volatile bool run;
-		thread* mdsThread;
+		thread mdsThread;
 	  // Operations
 	  public:
 		~MessageDeliverySystem (  );
@@ -39,7 +39,7 @@ namespace NRMCNetwork
 		bool stopSystem (  );
 	  private:
 		MessageDeliverySystem (  );
-		void handler ( struct sockaddr_in& addr, char* msg, int size );
+		static void handler ( struct sockaddr_in& addr, char* msg, int size );
 		void mds();
 	};
 }

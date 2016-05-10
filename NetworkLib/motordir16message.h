@@ -10,19 +10,18 @@ namespace NRMCNetwork
 		// Associations
 		// Attributes
 	private:
-		union Msg
+		char* rawMsg;
+		int size;
+		struct Data
 		{
-			char rawMsg[3];
-			struct Data
-			{
-				char opcode;
-				short motorDir;
-			} data;
-		} msg;
+			char opcode;
+			unsigned short motorDir;
+		} data;
 		struct sockaddr_in addr;
 		// Operations
 	public:
-		MotorDir16Message(char* msg, struct sockaddr_in& addr);
+		int getSize() const;
+		MotorDir16Message(char* msg, int size, struct sockaddr_in& addr);
 		MotorDir16Message(int opcode, short motorDir, struct sockaddr_in& addr);
 		MotorDir16Message ( const MotorDir16Message& msg );
 		~MotorDir16Message();

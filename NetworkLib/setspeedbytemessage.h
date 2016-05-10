@@ -10,20 +10,19 @@ namespace NRMCNetwork
 	  // Associations
 	  // Attributes
 	  private:
-		  union Msg
+		int size;
+		char* rawMsg;
+		  struct Data
 		  {
-			  char rawMsg[4];
-			  struct Data
-			  {
-				  char opcode;
-				  unsigned short motorNum;
-				  char speed;
-			  } data;
-		  } msg;
+			  char opcode;
+			  unsigned short motorNum;
+			  char speed;
+		  } data;
 		struct sockaddr_in addr;
 	  // Operations
 	  public:
-		SetSpeedByteMessage ( char* msg, struct sockaddr_in& addr );
+		int getSize() const;
+		SetSpeedByteMessage ( char* msg, int size, struct sockaddr_in& addr );
 		SetSpeedByteMessage ( int opcode, int motorNum, int speed, struct sockaddr_in& addr );
 		SetSpeedByteMessage ( const SetSpeedByteMessage& msg );
 		virtual ~SetSpeedByteMessage(  );

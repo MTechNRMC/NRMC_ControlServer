@@ -106,24 +106,25 @@ MessageDeliverySystem::~MessageDeliverySystem (  )
 	}
 }
 
-void MessageDeliverySystem::handler ( struct sockaddr_in& addr, char* msg )
+void MessageDeliverySystem::handler ( struct sockaddr_in& addr, char* msg, int size )
 {
 	Message* tmpMsg = 0;
 	switch ((int)msg[0])
 	{
 	case 0x00:	// ping
 		queueMessage(new OpcodeOnlyMessage(0x00, addr));	// send response
+		delete[] msg;
 		break;
 	case 0x01:	// move message
-		tmpMsg = new MotorDir16Message(msg, addr);
+		tmpMsg = new MotorDir16Message(msg, size, addr);
 		break;
 	case 0x02:	// speed message
-		tmpMsg = new SetSpeedByteMessage(msg, addr);
+		tmpMsg = new SetSpeedByteMessage(msg, size, addr);
 		break;
 	case 0xFD:	// current mode
 	case 0xFE:	// Start Auto Mode
 	case 0xFF:	// Stop Auto Mode
-		tmpMsg = new OpcodeOnlyMessage(msg, addr);
+		tmpMsg = new OpcodeOnlyMessage(msg, size, addr);
 		break;
 	default:
 		break;
@@ -149,7 +150,7 @@ void MessageDeliverySystem::mds()
 			queueLock.unlock();
 
 			// send the message
-			socket->sendMsg(tmpMsg->getMessage(), inet_ntoa(tmpMsg->getAddress().sin_addr));
+			socket->sendMsg(tmpMsg->getMessage(), tmpMsg->getSize(), inet_ntoa(tmpMsg->getAddress().sin_addr));
 
 			delete tmpMsg;
 		}

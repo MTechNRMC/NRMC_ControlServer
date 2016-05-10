@@ -39,7 +39,7 @@ namespace NRMCNetwork
 		bool stopSystem (  );
 	  private:
 		MessageDeliverySystem (  );
-		void handler ( struct sockaddr_in& addr, char* msg );
+		void handler ( struct sockaddr_in& addr, char* msg, int size );
 		void mds();
 	};
 }

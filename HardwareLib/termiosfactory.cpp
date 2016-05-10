@@ -1,133 +1,41 @@
 #include "termiosfactory.h"
+#include <stdexcept>
+
+using std::runtime_error;
 
 using namespace NRMCHardware;
 
-static TermiosFactory& TermiosFactory::getInstance (  )
+TermiosFactory& TermiosFactory::getInstance (  )
 {
 	static TermiosFactory instance;
 
-	return *instance;
+	return instance;
 }
 
-SmrtSerialPort * TermiosFactory::openPort(string portName, int baudRate)
+SerialPortInterface * TermiosFactory::openPort(string portName, int baudRate)
 {
 	return openPort(portName, baudRate, ParityBit::None);
 }
 
-SmrtSerialPort* TermiosFactory::openPort ( string portName, int baudRate, ParityBit parity )
+SerialPortInterface* TermiosFactory::openPort ( string portName, int baudRate, ParityBit parity )
 {
 	return openPort(portName, baudRate, parity, 8);
 }
 
-SmrtSerialPort* TermiosFactory::openPort ( string portName, int baudRate, ParityBit parity, int dataBits )
+SerialPortInterface* TermiosFactory::openPort ( string portName, int baudRate, ParityBit parity, int dataBits )
 {
 	return openPort(portName, baudRate, parity, dataBits, StopBit::One);
 }
 
-SmrtSerialPort* TermiosFactory::openPort ( string portName, int baudRate, ParityBit parity, int dataBits, StopBit stopBits )
+SerialPortInterface* TermiosFactory::openPort ( string portName, int baudRate, ParityBit parity, int dataBits, StopBit stopBits )
 {
-	SmrtSerialPort* port = 0;
 	SerialPortInterface* serialPort = openTermiosPort(portName, baudRate, parity, dataBits, stopBits);
 
-	if (serialPort != 0)
-		port = new SmrtSerialPort(*serialPort, *this);
-
-	return port;
-}
-
-SmrtSerialPort * TermiosFactory::openPort(bool(*checkConnected)(SerialPortInterface&), int baudRate)
-{
-	return openPort(checkConnected, baudRate, ParityBit::None);
-}
-
-SmrtSerialPort* TermiosFactory::openPort ( bool (*checkConnected)(SerialPortInterface&), int baudRate, ParityBit parity )
-{
-	return openPort(checkConnected, baudRate, ParityBit::None, 8);
-}
-
-SmrtSerialPort* TermiosFactory::openPort ( bool (*checkConnected)(SerialPortInterface&), int baudRate, ParityBit parity, int dataBits )
-{
-	return openPort(checkConnected, baudRate, parity, dataBits, StopBit::One);
-}
-
-SmrtSerialPort* TermiosFactory::openPort ( bool (*checkConnected)(SerialPortInterface&), int baudRate, ParityBit parity, int dataBits, StopBit stopBits )
-{
-	for (vector<string>::iterator it = portPool.begin(); it != portPool.end(); ++it)
-	{
-		try
-		{
-			SerialPortInterface* tmpPort = openTermiosPort(*it, baudRate, parity, dataBits, stopBits);	// open a port that is in the pool
-
-			// check if the port is connected to the device
-			if (checkConnected(*tmpPort))
-			{
-				portPool.erase(it);
-				return new SmrtSerialPort(*tmpPort, *this);
-			}
-
-			delete tmpPort;
-			tmpPort = 0;
-		}
-		catch (exception& e)
-		{/*ignore exception*/}
-	}
-
-	// no device was found connected to the device
-	return 0;
-}
-
-bool TermiosFactory::closePort(SmrtSerialPort& port)
-{
-	bool closed = port.getSerialPort().closePort();
-
-	if(closed)
-		addPortToPool(port.getSerialPort().getPortName());
-
-	delete port.serialPort;
-
-	return closed;
-}
-void TermiosFactory::addPortToPool(string portName)
-{
-	portPool.push_back(portName);
-}
-void TermiosFactory::removePortFromPool(string portName)
-{
-	for (vector<string>::iterator it = portPool.begin(); it != portPool.end(); ++it)
-	{
-		if ((*it).compare(portName) != 0)
-		{
-			portPool.erase(it);
-			break;
-		}
-	}
-}
-void TermiosFactory::refreshAvailablePorts()
-{
-	portPool.clear();	// clear the pool
-
-	// find all active ttys and add them to the list
-	for(int x = 0; x < 256; x++)
-	{
-		string ttyACM = rootPortDir + "ACM" + string(x) + "/device";
-		string ttyUSB = rootPortDir + "USB" + string(x) + "/device";
-		struct stat sb;
-
-		// check for ACM
-		if(lstat(ttyACM.c_str(), &sb) == 0)
-			portPool.push_back(ttyACM);	// port exists
-
-		// check for USB
-		if(lstat(ttyUSB.c_str(), &sb) == 0)
-					portPool.push_back(ttyUSB);	// port exists
-	}
+	return serialPort;
 }
 
 TermiosFactory::TermiosFactory (  )
-{
-	// get the ports available
-	refreshAvailablePorts();
-}
+{}
 
 TermiosFactory::~TermiosFactory (  )
 {}
@@ -142,7 +50,7 @@ SerialPortInterface* NRMCHardware::TermiosFactory::openTermiosPort(string portNa
 
 	// check if a good baud was returned
 	if(rate == B0)
-		throw exception("Invalid baud rate passed. See termios.h for valid baud rates");
+		throw runtime_error("Invalid baud rate passed. See termios.h for valid baud rates");
 
 	/*	Keep for reference later
 	// clear parity, stop, and data size bits
@@ -162,7 +70,7 @@ SerialPortInterface* NRMCHardware::TermiosFactory::openTermiosPort(string portNa
 	case ParityBit::None:
 		break;		// parity is already disabled
 	default:
-		throw exception("Invalid parity passed. Termios only supports Even, Odd or no parity");
+		throw runtime_error("Invalid parity passed. Termios only supports Even, Odd or no parity");
 	}
 
 	// set data bits Linux can only use 5,6,7,8 bits
@@ -181,7 +89,7 @@ SerialPortInterface* NRMCHardware::TermiosFactory::openTermiosPort(string portNa
 		flags |= CS8;	// 8 data bits
 		break;
 	default:
-		throw exception("Invalid data size passed. Termios only supports 5, 6, 7, and 8");
+		throw runtime_error("Invalid data size passed. Termios only supports 5, 6, 7, and 8");
 	}
 
 	// set the stop bit Linux can only use 1 or 2
@@ -193,7 +101,7 @@ SerialPortInterface* NRMCHardware::TermiosFactory::openTermiosPort(string portNa
 		flags |= CSTOPB;	// set two stop bits
 		break;
 	default:
-		throw exception("Invalid stop bit passed. Termios only supports One or Two stop bit(s)");
+		throw runtime_error("Invalid stop bit passed. Termios only supports One or Two stop bit(s)");
 	}
 
 	return new TermiosSerialPort(portName, rate, flags);	// create the new serial port

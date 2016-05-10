@@ -1,6 +1,6 @@
 #Macros to specify compiler, compiler/linking flags, target file
 C++  = g++
-CFLAGS = -Wall -std=c++11 -funsigned-char
+CFLAGS = -Wall -std=c++11 -funsigned-char -pthread
 CTESTFLAGS = -g -pthread
 GTESTFLAGS = -L ../googletest-release-1.7.0/ -l gtest -l gtest_main 
 TESTINCLUDES = -I ../googletest-release-1.7.0/include/

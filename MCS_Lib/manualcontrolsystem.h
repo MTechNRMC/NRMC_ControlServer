@@ -2,6 +2,7 @@
 #define MANUALCONTROLSYSTEM_H
 
 #include <queue>
+#include <mutex>
 #include <thread>
 
 #include "../NetworkLib/exchangesubscriber.h"
@@ -16,6 +17,7 @@
 
 using std::queue;
 using std::thread;
+using std::mutex;
 
 using NRMCUtil::SystemInterface;
 using NRMCNetwork::ExchangeSubscriber;
@@ -35,6 +37,7 @@ namespace NRMC_MCS
 		// Attributes
 	private:
 		bool manualControl;
+		mutex queueLock;
 		volatile bool run;
 		MDS_Interface* networkInterface;
 		HardwareInterface* hardwareInterface;

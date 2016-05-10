@@ -53,7 +53,9 @@ ManualControlSystem::~ManualControlSystem (  )
 void ManualControlSystem::queueMessage ( const Message& message )
 {
 	Message* tmp = message.clone();
+	queueLock.lock();
 	msgQueue.push(tmp);
+	queueLock.unlock();
 }
 
 bool ManualControlSystem::subscriberWants ( const Message& message )
@@ -112,6 +114,7 @@ void NRMC_MCS::ManualControlSystem::mcs()
 
 	while (run)
 	{
+		queueLock.lock();
 		while (run && !msgQueue.empty())
 		{
 			switch (msgQueue.front()->getOpcode())
@@ -144,6 +147,7 @@ void NRMC_MCS::ManualControlSystem::mcs()
 			// small delay for next command 
 			std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
 		}
+		queueLock.unlock();
 
 		// stop if no commands received
 		eStop((MotorController*)controller->getPeripheral());

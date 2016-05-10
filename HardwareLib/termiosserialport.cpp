@@ -1,5 +1,7 @@
 #include <fcntl.h>
-#include <exception>
+#include <stdexcept>
+#include <unistd.h>
+#include <string.h>
 #include "termiosserialport.h"
 
 using std::runtime_error;
@@ -7,7 +9,12 @@ using std::invalid_argument;
 
 using namespace NRMCHardware;
 
-string NRMCHardware::TermiosSerialPort::getPortName (  )
+bool TermiosSerialPort::isOpen()
+{
+	return open;
+}
+
+string TermiosSerialPort::getPortName (  )
 {
 	return portName;
 }
@@ -148,6 +155,8 @@ TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_
 	// apply the configuration
 	if(tcsetattr(ttyFd, TCSAFLUSH, &config) < 0)
 		throw runtime_error("Unable to apply configuration to: "+portName);
+
+	open = true;
 }
 
 TermiosSerialPort::~TermiosSerialPort (  )
@@ -169,24 +178,19 @@ vector<char> TermiosSerialPort::readBytes (  )
 
 string TermiosSerialPort::readLine (  )
 {
-	readLine('\n');		// default to reading to the newline
+	return readLine('\n');		// default to reading to the newline
 }
 
 vector<char> TermiosSerialPort::readBytes ( int size )
 {
-	char* buffer = new char[size];		// create a buffer the size of the bytes that need to be received
-	memset(buffer, 0, size);			// 0 the buffer
-	read(ttyFd, buffer, size);			// read the message
-	vector<char> msg(buffer,size);
-	delete buffer;
-	buffer = 0;
-
-	return msg;							// return the what was read
+	vector<char> buffer(size);
+	read(ttyFd, &buffer[0], size);			// read the message
+	return buffer;							// return the what was read
 }
 
 string TermiosSerialPort::readLine ( char terminator )
 {
-	char character = '';
+	char character = '\0';
 	string msg = "";
 
 	// read the first char in
@@ -227,6 +231,8 @@ bool TermiosSerialPort::closePort (  )
 {
 	if(close(ttyFd) < 0)
 		return false;
+
+	open = false;
 	return true;
 }
 

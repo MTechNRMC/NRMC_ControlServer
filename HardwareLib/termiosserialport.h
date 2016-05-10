@@ -14,12 +14,14 @@ namespace NRMCHardware
 		// Associations
 		// Attributes
 	private:
+		bool open;
 		int ttyFd;
 		string portName;
 		speed_t baudRate;
 		tcflag_t  controlFlags;
 		// Operations
 	public:
+		bool isOpen();
 		string getPortName();
 		int getBaudRate();
 		TermiosSerialPort(string portName, speed_t baudRate);

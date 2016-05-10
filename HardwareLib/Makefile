@@ -9,7 +9,7 @@ ARFLAGS = rvs
 LD = g++
 LDFLAGS = 
 LIBS = 
-OBJS = micromaestro12.o peripheralfactory.o smrtperipheral.o smrtserialport.o termiosfactory.o termiosserialport.o
+OBJS = micromaestro12.o peripheralfactory.o smrtperipheral.o termiosfactory.o termiosserialport.o
 TSTOBJS = 
 ARLIB = NRMCHardwareLib.a
 TSTEXEC = 
@@ -29,9 +29,6 @@ peripheralfactory.o:		smrtperipheral.h serialportfactory.h hardwareinterface.h p
 		
 smrtperipheral.o:		peripheraltype.h peripheral.h hardwareinterface.h
 		$(C++) $(CFLAGS) -c smrtperipheral.cpp
-		
-smrtserialport.o:		serialportinterface.h serialportfactory.h
-		$(C++) $(CFLAGS) -c smrtserialport.cpp
 		
 termiosfactory.o:		termiosserialport.h serialportfactory.h paritybit.h stopbit.h
 		$(C++) $(CFLAGS) -c termiosfactory.cpp

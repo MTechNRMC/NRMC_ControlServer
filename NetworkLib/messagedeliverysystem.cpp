@@ -34,7 +34,9 @@ void MessageDeliverySystem::attachNetworkInterface( NetworkInterface* interface 
 		socket = 0;
 	}
 	socket = interface;
-	socket->startReceive(handler);
+
+	if(socket)
+		socket->startReceive(handler);
 }
 
 void MessageDeliverySystem::queueMessage ( Message* message )

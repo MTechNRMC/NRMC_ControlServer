@@ -1,8 +1,10 @@
 #include <fcntl.h>
 #include <stdexcept>
 #include <unistd.h>
-#include <string.h>
 #include "termiosserialport.h"
+
+#define VMINVAL 0		// no min num of bytes to read
+#define VTIMEVAL 5		// timeout after 0.5 seconds
 
 using std::runtime_error;
 using std::invalid_argument;
@@ -128,7 +130,7 @@ TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_
 	static const int controlMask = ~(CSIZE | CSTOPB | PARENB | PARODD);
 	termios config;
 
-	this->ttyFd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
+	this->ttyFd = open(portName.c_str(), O_RDWR | O_NOCTTY );
 	this->portName = portName;
 	this->baudRate = baudRate;
 	this->controlFlags = controlFlags;
@@ -146,6 +148,8 @@ TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_
 
 	config.c_cflag &= controlMask; // clear the size stop and parity flags
 	config.c_cflag |= controlFlags;	// set the control flags
+	config.c_cc[VMIN] = VMINVAL;
+	config.c_cc[VTIME] = VTIMEVAL;
 
 	// set baud
 	if(cfsetispeed(&config, baudRate) < 0 || cfsetospeed(&config, baudRate))
@@ -183,13 +187,13 @@ string TermiosSerialPort::readLine (  )
 vector<char> TermiosSerialPort::readBytes ( int size )
 {
 	vector<char> buffer(size);
-	read(ttyFd, &buffer[0], size);			// read the message
-	return buffer;							// return the what was read
+	while(read(ttyFd, &buffer[0], size) <= 0);	// read the message block till set bytes
+	return buffer;								// return the what was read
 }
 
 string TermiosSerialPort::readLine ( char terminator )
 {
-	char character = '\0';
+	char character = 'x';
 	string msg = "";
 
 	// read the first char in

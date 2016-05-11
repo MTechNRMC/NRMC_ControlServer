@@ -3,9 +3,11 @@
 
 #include <termios.h>
 #include <vector>
+#include <string.h>
 #include "serialportinterface.h"
 
 using std::vector;
+using std::string;
 
 namespace NRMCHardware
 {

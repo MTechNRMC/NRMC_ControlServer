@@ -3,6 +3,7 @@
 
 #include <string>
 #include "peripheraltype.h"
+#include "peripheralsystem.h"
 
 using std::string;
 
@@ -18,6 +19,7 @@ namespace NRMCHardware
 		Peripheral (  ){};
 		virtual ~Peripheral (  ){};
 		virtual PeripheralType getType (  ) = 0;
+		virtual PeripheralSystem getSystem ( ) = 0;
 		virtual string getConnectedPort(  ) = 0;
 	};
 }

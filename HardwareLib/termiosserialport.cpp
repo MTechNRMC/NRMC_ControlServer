@@ -11,10 +11,10 @@ using namespace NRMCHardware;
 
 bool TermiosSerialPort::isOpen()
 {
-	return open;
+	return portOpen;
 }
 
-string TermiosSerialPort::getPortName (  )
+string TermiosSerialPort::getPortName(  )
 {
 	return portName;
 }
@@ -126,10 +126,9 @@ TermiosSerialPort::TermiosSerialPort ( string portName, speed_t baudRate ) : Ter
 TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_t controlFlags)
 {
 	static const int controlMask = ~(CSIZE | CSTOPB | PARENB | PARODD);
-
 	termios config;
 
-	this->ttyFd = open(portName.c_str(), O_RDWR|O_NOCTTY|O_NONBLOCK);
+	this->ttyFd = open(portName.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
 	this->portName = portName;
 	this->baudRate = baudRate;
 	this->controlFlags = controlFlags;
@@ -145,7 +144,7 @@ TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_
 	if(tcgetattr(ttyFd, &config))
 		throw runtime_error("Failed to get the configuration for: "+portName);
 
-	config.c_cflag &= controlMask;	// clear the size stop and parity flags
+	config.c_cflag &= controlMask; // clear the size stop and parity flags
 	config.c_cflag |= controlFlags;	// set the control flags
 
 	// set baud
@@ -156,7 +155,7 @@ TermiosSerialPort::TermiosSerialPort (string portName, speed_t baudRate, tcflag_
 	if(tcsetattr(ttyFd, TCSAFLUSH, &config) < 0)
 		throw runtime_error("Unable to apply configuration to: "+portName);
 
-	open = true;
+	portOpen = true;
 }
 
 TermiosSerialPort::~TermiosSerialPort (  )
@@ -232,7 +231,7 @@ bool TermiosSerialPort::closePort (  )
 	if(close(ttyFd) < 0)
 		return false;
 
-	open = false;
+	portOpen = false;
 	return true;
 }
 

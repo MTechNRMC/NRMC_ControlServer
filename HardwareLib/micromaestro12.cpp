@@ -1,10 +1,28 @@
 #include "micromaestro12.h"
+#include <vector>
+
+using std::vector;
 
 using namespace NRMCHardware;
+
+PeripheralSystem MicroMaestro12::getSystem()
+{
+	return sys;
+}
+
+PeripheralType MicroMaestro12::getType (  )
+{
+	return (PeripheralType)(PeripheralType::motorController | PeripheralType::servoController);
+}
 
 int MicroMaestro12::getNumOfServos (  )
 {
 	return 12;		// the micro mastro being used only allows for 12 servos per board and we will not be dasiy chaining them
+}
+
+string MicroMaestro12::getConnectedPort()
+{
+	return port->getPortName();
 }
 
 int MicroMaestro12::getNumOfMotors()
@@ -17,7 +35,7 @@ Direction MicroMaestro12::getDirection(int motor)
 	if (motor < 0 || motor > getNumOfMotors())
 		return Direction::stop;	// no motor so return stopped
 
-	return motors[motor];
+	return motors[motor].dir;
 }
 
 double NRMCHardware::MicroMaestro12::getSpeed(int motor, Direction direction)
@@ -85,19 +103,18 @@ void NRMCHardware::MicroMaestro12::setDirection(int motor, Direction direction)
 	setMotor(motor);				// set the changes
 }
 
-
 void MicroMaestro12::setPos ( int servo, char pos )
 {
-	char msg[] = { 0xFF, 0x00, 0x00 };	// base message
+	char msg[] = { '\xFF', '\x00', '\x00' };	// base message
 	// check if the servo number is correct
-	if (servo < 0 || servo > maxValue)
+	if (servo < 0 || servo > getNumOfServos())
 		return;		// fail silently
 
 	// set the servo to move and to what pos
 	msg[1] = (char)servo;
 	msg[2] = pos;
 
-	port->getSerialPort().writeBytes(msg);
+	port->writeBytes(msg, sizeof(msg));
 }
 
 void MicroMaestro12::setPos ( int servo, double pos )
@@ -114,10 +131,11 @@ void MicroMaestro12::setPos ( int servo, double pos )
 	setPos(servo, actPos);
 }
 
-MicroMaestro12::MicroMaestro12 ( SmrtSerialPort* port )
+MicroMaestro12::MicroMaestro12 ( SerialPortInterface* port, PeripheralSystem sys )
 {
 	Motor tmp = { Direction::stop, Motor::netural, Motor::netural };
 	this->port = port;
+	this->sys = sys;
 	motors = new Motor[getNumOfMotors()];
 
 	// init all the motors
@@ -138,12 +156,12 @@ void NRMCHardware::MicroMaestro12::allStop()
 
 bool NRMCHardware::MicroMaestro12::connectedTo(SerialPortInterface & port)
 {
-	char* receivedMsg;
-	static const char errorRequest[] = { 0xA1 };
-	port.writeBytes(errorRequest);
+	vector<char> receivedMsg;
+	static char errorRequest[] = { '\xA1' };
+	port.writeBytes(errorRequest, sizeof(errorRequest));
 
 	// look for a response
-	if ((receivedMsg = port.readBytes()) != 0)
+	if (!(receivedMsg = port.readBytes()).empty())
 		return true;	// a message was received can assume that a micro mastro is connected
 
 	return false;	// no message was received on this port

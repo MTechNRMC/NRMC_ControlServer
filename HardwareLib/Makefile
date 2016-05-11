@@ -21,7 +21,7 @@ all:		$(ARLIB)
 $(ARLIB):	$(OBJS)
 		$(AR) $(ARFLAGS) $(ARLIB) $(OBJS) $(LIBS)
 		
-micromaestro12.o:		motorcontroller.h servocontroller.h smrtserialport.h
+micromaestro12.o:		peripheral.h motorcontroller.h servocontroller.h serialportinterface.h
 		$(C++) $(CFLAGS) -c micromaestro12.cpp
 		
 peripheralfactory.o:		smrtperipheral.h serialportfactory.h hardwareinterface.h peripheraltype.h micromaestro12.h

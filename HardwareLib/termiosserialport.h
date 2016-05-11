@@ -14,7 +14,7 @@ namespace NRMCHardware
 		// Associations
 		// Attributes
 	private:
-		bool open;
+		bool portOpen;
 		int ttyFd;
 		string portName;
 		speed_t baudRate;

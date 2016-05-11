@@ -2,10 +2,12 @@
 #define HARDWAREINTERFACE_H
 
 #include "smrtperipheral.h"
-#include "peripheraltype.h"
+#include "peripheralsystem.h"
 
 namespace NRMCHardware
 {
+	class SmrtPeripheral;
+
 	// Interface
 	class HardwareInterface 
 	{
@@ -15,7 +17,7 @@ namespace NRMCHardware
 	  public:
 		HardwareInterface(  ){}
 		virtual ~HardwareInterface(  ){}
-		virtual SmrtPeripheral* getPeripheral ( PeripheralType type, bool forceConnect = false) = 0;
+		virtual SmrtPeripheral* getPeripheral ( PeripheralSystem sys, bool forceConnect = false) = 0;
 		virtual void returnPeripheral ( Peripheral& peripheral ) = 0;
 	};
 }

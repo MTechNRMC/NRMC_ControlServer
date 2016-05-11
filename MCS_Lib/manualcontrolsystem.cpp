@@ -4,6 +4,7 @@
 
 #include "../HardwareLib/direction.h"
 #include "../HardwareLib/smrtperipheral.h"
+#include "../HardwareLib/peripheralsystem.h"
 
 #include "../NetworkLib/subscribableexchange.h"
 
@@ -13,7 +14,7 @@ using namespace NRMC_MCS;
 
 using NRMCHardware::Direction;
 using NRMCHardware::SmrtPeripheral;
-using NRMCHardware::PeripheralType;
+using NRMCHardware::PeripheralSystem;
 using NRMCNetwork::SubscribableExchange;
 
 using std::exception;
@@ -110,7 +111,7 @@ bool NRMC_MCS::ManualControlSystem::stopSystem()
 
 void NRMC_MCS::ManualControlSystem::mcs()
 {
-	SmrtPeripheral* controller = manualControl ? hardwareInterface->getPeripheral(PeripheralType::motorController) : 0;
+	SmrtPeripheral* controller = manualControl ? hardwareInterface->getPeripheral(PeripheralSystem::LocomotionSystem) : 0;
 
 	while (run)
 	{
@@ -120,10 +121,10 @@ void NRMC_MCS::ManualControlSystem::mcs()
 			switch (msgQueue.front()->getOpcode())
 			{
 			case 0x01:
-				move((MotorDir16Message*)msgQueue.front(), (MotorController*)controller->getPeripheral());
+				move((MotorDir16Message*)msgQueue.front(), dynamic_cast<MotorController*>(controller->getPeripheral()));
 				break;
 			case 0x02:
-				setThrottle((SetSpeedByteMessage*)msgQueue.front(), (MotorController*)controller->getPeripheral());
+				setThrottle((SetSpeedByteMessage*)msgQueue.front(), dynamic_cast<MotorController*>(controller->getPeripheral()));
 				break;
 			case 0xFE:
 				manualControl = false;
@@ -136,7 +137,7 @@ void NRMC_MCS::ManualControlSystem::mcs()
 			case 0xFF:
 				manualControl = true;
 				if (controller == 0)
-					controller = hardwareInterface->getPeripheral(PeripheralType::motorController);
+					controller = hardwareInterface->getPeripheral(PeripheralSystem::LocomotionSystem);
 				break;
 			}
 
@@ -150,7 +151,7 @@ void NRMC_MCS::ManualControlSystem::mcs()
 		queueLock.unlock();
 
 		// stop if no commands received
-		eStop((MotorController*)controller->getPeripheral());
+		eStop(dynamic_cast<MotorController*>(controller->getPeripheral()));
 	}
 }
 

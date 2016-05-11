@@ -7,7 +7,7 @@
 namespace NRMCHardware
 {
 	// Interface
-	class MotorController : public Peripheral
+	class MotorController : virtual public Peripheral
 	{
 		// Associations
 		// Attributes

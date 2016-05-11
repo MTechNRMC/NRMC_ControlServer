@@ -7,7 +7,7 @@
 namespace NRMCHardware
 {
 	// Interface
-	class ServoController : public Peripheral
+	class ServoController : virtual public Peripheral
 	{
 		// Associations
 		// Attributes

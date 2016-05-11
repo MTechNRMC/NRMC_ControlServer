@@ -1,7 +1,7 @@
 #include "peripheralfactory.h"
 #include "micromaestro12.h"
 
-#define MM16PORT "/dev/ttyACM1"
+#define MM16PORT "/dev/ttyACM0"
 using namespace NRMCHardware;
 
 PeripheralFactory& PeripheralFactory::getInstance (  )

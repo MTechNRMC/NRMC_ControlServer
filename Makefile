@@ -8,18 +8,21 @@ AR = ar
 ARFLAGS = rvs
 LD = g++
 LDFLAGS = 
-LIBS = NetworkLib/NRMCNetworkLib.a NetworkLib/SocketLib.a MCS_Lib/NRMC_MCSLib.a HardwareLib/NRMCHardwareLib.a
+LIBS = NetworkLib/NRMCNetworkLib.a NetworkLib/SocketLib/SocketLib.a MCS_Lib/NRMC_MCSLib.a HardwareLib/NRMCHardwareLib.a
 OBJS = 
 TSTOBJS = 
 ARLIB = 
 EXEC = ControlServer
+EXECSRC = CntrlSrvrDriver.cpp
 
 #Rules to create target file Driver
 # If any files on line with colon are modified, then recompile the object file
 all:		$(EXEC)
 		
 $(EXEC):	$(LIBS)
-		#$(C++) $(CFLAGS) -o $(EXEC) $(LIBS) 
+		$(C++) $(CFLAGS) $(EXECSRC) -o $(EXEC) $(LIBS) 
+		
+Libs:		$(LIBS)
 		
 NetworkLib/NRMCNetworkLib.a:
 		(cd NetworkLib; make all;)

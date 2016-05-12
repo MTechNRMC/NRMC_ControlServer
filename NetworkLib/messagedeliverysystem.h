@@ -37,6 +37,7 @@ namespace NRMCNetwork
 		void queueMessage ( Message* message );
 		bool startSystem (  );
 		bool stopSystem (  );
+		void runMDS();		// Run the MDS on the same thread instead of on a new thread
 	  private:
 		MessageDeliverySystem (  );
 		static void handler ( struct sockaddr_in& addr, char* msg, int size );

@@ -5,16 +5,19 @@
 #include "../HardwareLib/direction.h"
 #include "../HardwareLib/smrtperipheral.h"
 #include "../HardwareLib/peripheralsystem.h"
+#include "../HardwareLib/servocontroller.h"
 
 #include "../NetworkLib/subscribableexchange.h"
 
 #define DELAY 100	// 0.1 second delay
+#define ARMSERVO 5	// the arms for the robot. NOTE: they need to be treated as a servo
 
 using namespace NRMC_MCS;
 
 using NRMCHardware::Direction;
 using NRMCHardware::SmrtPeripheral;
 using NRMCHardware::PeripheralSystem;
+using NRMCHardware::ServoController;
 using NRMCNetwork::SubscribableExchange;
 
 using std::exception;
@@ -111,20 +114,24 @@ bool NRMC_MCS::ManualControlSystem::stopSystem()
 
 void NRMC_MCS::ManualControlSystem::mcs()
 {
+	bool unlock = false;
 	SmrtPeripheral* controller = manualControl ? hardwareInterface->getPeripheral(PeripheralSystem::LocomotionSystem) : 0;
 
 	while (run)
 	{
 		queueLock.lock();
+		unlock = true;
 		while (run && !msgQueue.empty())
 		{
 			switch (msgQueue.front()->getOpcode())
 			{
 			case 0x01:
-				move((MotorDir16Message*)msgQueue.front(), dynamic_cast<MotorController*>(controller->getPeripheral()));
+				if(controller != 0)
+					move((MotorDir16Message*)msgQueue.front(), dynamic_cast<MotorController*>(controller->getPeripheral()));
 				break;
 			case 0x02:
-				setThrottle((SetSpeedByteMessage*)msgQueue.front(), dynamic_cast<MotorController*>(controller->getPeripheral()));
+				if(controller != 0)
+					setThrottle((SetSpeedByteMessage*)msgQueue.front(), dynamic_cast<MotorController*>(controller->getPeripheral()));
 				break;
 			case 0xFE:
 				manualControl = false;
@@ -145,10 +152,14 @@ void NRMC_MCS::ManualControlSystem::mcs()
 			delete msgQueue.front();
 			msgQueue.pop();
 
+			queueLock.unlock();
+			unlock = false;
+
 			// small delay for next command 
 			std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
 		}
-		queueLock.unlock();
+		if(unlock)
+			queueLock.unlock();
 
 		// stop if no commands received
 		eStop(dynamic_cast<MotorController*>(controller->getPeripheral()));
@@ -157,6 +168,8 @@ void NRMC_MCS::ManualControlSystem::mcs()
 
 void NRMC_MCS::ManualControlSystem::move(MotorDir16Message * msg, MotorController* controller)
 {
+	static const char DELTA = 1;
+	static char pos = 127;
 	// check if manual control is disabled
 	if (!manualControl || controller == 0)
 		return;
@@ -180,8 +193,32 @@ void NRMC_MCS::ManualControlSystem::move(MotorDir16Message * msg, MotorControlle
 			break;
 		}
 
-		// send the command
-		controller->setDirection(motor, direction);
+		if(motor == ARMSERVO)
+		{
+			if(pos < '\xFE' && pos > '\x00')
+			{
+				switch(direction)
+				{
+				case Direction::forward:
+					pos += DELTA;
+					break;
+				case Direction::backward:
+					pos -= DELTA;
+					break;
+				default:
+					break;
+				}
+			}
+
+			// send the command
+			ServoController* svc = dynamic_cast<ServoController*>(controller);
+
+			if(svc != 0)
+				svc->setPos(motor, pos);
+		}
+		else
+			// send the command
+			controller->setDirection(motor, direction);
 	}
 }
 

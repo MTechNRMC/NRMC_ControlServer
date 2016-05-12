@@ -80,6 +80,12 @@ bool MessageDeliverySystem::stopSystem (  )
 	return true;
 }
 
+void MessageDeliverySystem::runMDS()
+{
+	run = true;
+	mds();
+}
+
 MessageDeliverySystem::MessageDeliverySystem (  )
 {
 	socket = 0;
@@ -143,13 +149,13 @@ void MessageDeliverySystem::mds()
 		{
 			Message* tmpMsg = msgSendQueue.front();
 			msgSendQueue.pop();
-			queueLock.unlock();
 
 			// send the message
 			socket->sendMsg(tmpMsg->getMessage(), tmpMsg->getSize(), inet_ntoa(tmpMsg->getAddress().sin_addr));
 
 			delete tmpMsg;
 		}
+		queueLock.unlock();
 		std::this_thread::sleep_for(std::chrono::milliseconds(DELAY));
 	}
 }

@@ -200,6 +200,8 @@ char* UDP_Sock::receiveMsg ( sockaddr_in& msgAddr, int& size )
 	for (int index = 0; index < msgLength; index++)
 		msg[index] = buffer[index];
 
+	// set message size
+	size = msgLength;
 	// return the message
 	return msg;
 }

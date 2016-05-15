@@ -237,5 +237,8 @@ void NRMC_MCS::ManualControlSystem::eStop(MotorController* controller)
 	if (!manualControl || controller == 0)
 		return;
 
-	controller->allStop();
+	// set all 8 motors, or the max motors supported whatever is smallest, to a direction
+	for (int motor = 0; motor < 8 && motor < controller->getNumOfMotors(); motor++)
+		if(motor != ARMSERVO)
+			controller->setDirection(motor, Direction::stop);
 }

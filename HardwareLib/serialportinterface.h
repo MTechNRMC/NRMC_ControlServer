@@ -16,6 +16,7 @@ namespace NRMCHardware
 		// Attributes
 		// Operations
 	public:
+		virtual void setDtr(bool enable) = 0;
 		virtual bool isOpen() = 0;
 		virtual string getPortName() = 0;
 		virtual int getBaudRate() = 0;

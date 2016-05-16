@@ -10,7 +10,7 @@
 #include "../NetworkLib/subscribableexchange.h"
 
 #define DELAY 100	// 0.1 second delay
-#define ARMSERVO 5	// the arms for the robot. NOTE: they need to be treated as a servo
+#define ARMSERVO 7	// the arms for the robot. NOTE: they need to be treated as a servo
 
 using namespace NRMC_MCS;
 

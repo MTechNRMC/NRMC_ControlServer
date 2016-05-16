@@ -51,7 +51,7 @@ double NRMCHardware::MicroMaestro12::getSpeed(int motor, Direction direction)
 
 void NRMCHardware::MicroMaestro12::setSpeed(int motor, char speed, Direction direction)
 {
-	if (motor < 0 || motor > 1)
+	if (motor < 0 || motor > getNumOfMotors())
 		return;	// fail
 
 	// calc the speed
@@ -95,7 +95,7 @@ void NRMCHardware::MicroMaestro12::setDirectionAll(Direction direction)
 void NRMCHardware::MicroMaestro12::setDirection(int motor, Direction direction)
 {
 	// check if a valid motor was passed
-	if (motor < 0 || motor > 1)
+	if (motor < 0 || motor > getNumOfMotors())
 		return;
 
 	// set the new dir. Both is the same as stop
@@ -133,7 +133,7 @@ void MicroMaestro12::setPos ( int servo, double pos )
 
 MicroMaestro12::MicroMaestro12 ( SerialPortInterface* port, PeripheralSystem sys )
 {
-	Motor tmp = { Direction::stop, Motor::netural, Motor::netural };
+	Motor tmp = { Direction::stop, '\xfe', '\x00' };
 	this->port = port;
 	this->sys = sys;
 	motors = new Motor[getNumOfMotors()];
@@ -171,7 +171,7 @@ void NRMCHardware::MicroMaestro12::setMotor(int motor)
 {
 	char speed;
 	// check if the passed motor is valid
-	if (motor < 0 || motor > 1)
+	if (motor < 0 || motor > getNumOfMotors())
 		return;		 // fail
 
 	switch (motors[motor].dir)

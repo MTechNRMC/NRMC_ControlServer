@@ -23,6 +23,7 @@ namespace NRMCHardware
 		tcflag_t  controlFlags;
 		// Operations
 	public:
+		void setDtr(bool enable);
 		bool isOpen();
 		string getPortName();
 		int getBaudRate();

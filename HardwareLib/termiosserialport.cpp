@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <stdexcept>
 #include <unistd.h>
+#include <sys/ioctl.h>
 #include "termiosserialport.h"
 
 #define VMINVAL 0		// no min num of bytes to read
@@ -10,6 +11,16 @@ using std::runtime_error;
 using std::invalid_argument;
 
 using namespace NRMCHardware;
+
+void TermiosSerialPort::setDtr(bool enable)
+{
+	int iFlags = TIOCM_DTR;
+
+	if(enable)
+		ioctl(ttyFd, TIOCMBIC, &iFlags);
+	else
+		ioctl(ttyFd, TIOCMBIC, &iFlags);
+}
 
 bool TermiosSerialPort::isOpen()
 {

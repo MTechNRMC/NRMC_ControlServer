@@ -168,8 +168,8 @@ void NRMC_MCS::ManualControlSystem::mcs()
 
 void NRMC_MCS::ManualControlSystem::move(MotorDir16Message * msg, MotorController* controller)
 {
-	static const char DELTA = 1;
-	static char pos = 127;
+	static const char DELTA = 5;
+	static char pos = 150;
 	// check if manual control is disabled
 	if (!manualControl || controller == 0)
 		return;
@@ -195,20 +195,11 @@ void NRMC_MCS::ManualControlSystem::move(MotorDir16Message * msg, MotorControlle
 
 		if(motor == ARMSERVO)
 		{
-			if(pos < '\xFE' && pos > '\x00')
-			{
-				switch(direction)
-				{
-				case Direction::forward:
-					pos += DELTA;
-					break;
-				case Direction::backward:
-					pos -= DELTA;
-					break;
-				default:
-					break;
-				}
-			}
+			if(pos < '\xFE' && direction == Direction::forward)
+				pos += DELTA;
+
+			else if(pos > '\x00' && direction == Direction::backward)
+				pos -= DELTA;
 
 			// send the command
 			ServoController* svc = dynamic_cast<ServoController*>(controller);

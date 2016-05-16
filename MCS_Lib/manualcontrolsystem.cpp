@@ -195,10 +195,10 @@ void NRMC_MCS::ManualControlSystem::move(MotorDir16Message * msg, MotorControlle
 
 		if(motor == ARMSERVO)
 		{
-			if(pos < '\xFE' && direction == Direction::forward)
+			if(pos + DELTA < '\xFE' && direction == Direction::forward)
 				pos += DELTA;
 
-			else if(pos > '\x00' && direction == Direction::backward)
+			else if(pos - DELTA > '\x00' && direction == Direction::backward)
 				pos -= DELTA;
 
 			// send the command

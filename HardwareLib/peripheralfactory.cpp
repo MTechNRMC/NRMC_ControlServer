@@ -1,7 +1,9 @@
 #include "peripheralfactory.h"
 #include "micromaestro12.h"
+#include "RPLidar.h"
 
-#define MM16PORT "/dev/ttyACM0"
+#define MM16PORT 	"/dev/ttyACM0"
+#define RPLOCPORT	"/dev/ttyUSB0"
 using namespace NRMCHardware;
 
 PeripheralFactory& PeripheralFactory::getInstance (  )
@@ -92,6 +94,7 @@ SmrtPeripheral * NRMCHardware::PeripheralFactory::connectPeripheral(PeripheralSy
 	case NRMCHardware::ObsticalDetectionLIDAR:
 		break;
 	case NRMCHardware::LocalizationLIDAR:
+		tmp = new RPLidar(RPLOCPORT, 115200, PeripheralSystem::LocalizationLIDAR);
 		break;
 	}
 

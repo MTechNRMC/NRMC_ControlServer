@@ -15,7 +15,7 @@ using std::string;
 
 namespace NRMCHardware
 {
-	class RPLidar: public NRMCHardware::Lidar
+	class RPLidar: public Lidar
 	{
 	private:
 		string port;

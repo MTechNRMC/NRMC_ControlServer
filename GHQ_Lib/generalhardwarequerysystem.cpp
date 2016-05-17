@@ -7,6 +7,7 @@ using std::bad_function_call;
 using NRMCNetwork::LIADRMessage;
 using NRMCHardware::Lidar;
 using NRMCHardware::PeripheralSystem;
+using NRMCHardware::SmrtPeripheral;
 
 Message* GeneralHardwareQuerySystem::queryHardware ( Device device )
 {
@@ -16,12 +17,16 @@ Message* GeneralHardwareQuerySystem::queryHardware ( Device device )
 	switch(device)
 	{
 	case Device::LocalizationLIDAR:
-		Lidar* rp = dynamic_cast<Lidar*>(hardwareInterface->getPeripheral(PeripheralSystem::LocalizationLIDAR));
+		Lidar* rp;
+		SmrtPeripheral* lidarPhral = hardwareInterface->getPeripheral(PeripheralSystem::LocalizationLIDAR);
 
-		if(rp == 0)
+		if((rp = dynamic_cast<Lidar*>(lidarPhral->getPeripheral())) == 0)
 			break;
 
 		msg = new LIADRMessage(0, rp->getScan(), dummyAddr);
+		rp = 0;
+		delete lidarPhral;
+		lidarPhral = 0;
 		break;
 	}
 

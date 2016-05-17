@@ -2,6 +2,7 @@
 #define HARDWARELIB_LIDAR_H_
 
 #include <vector>
+#include "peripheral.h"
 
 using std::vector;
 
@@ -20,7 +21,7 @@ namespace NRMCHardware
 	};
 
 	// Interface
-	class Lidar : virtual public Peripheral
+	class Lidar : public Peripheral
 	{
 		// Associations
 		// Attributes

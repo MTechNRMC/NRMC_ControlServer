@@ -9,10 +9,10 @@ ARFLAGS = rvs
 LD = g++
 LDFLAGS = 
 LIBS = 
-OBJS = micromaestro12.o peripheralfactory.o smrtperipheral.o termiosfactory.o termiosserialport.o
+OBJS = micromaestro12.o peripheralfactory.o smrtperipheral.o termiosfactory.o termiosserialport.o RPLidar.o
 TSTOBJS = 
 ARLIB = NRMCHardwareLib.a
-TSTEXEC = 
+TSTEXEC = Tests/LidarTest
 
 #Rules to create target file Driver
 # If any files on line with colon are modified, then recompile the object file
@@ -36,13 +36,19 @@ termiosfactory.o:		termiosserialport.h serialportfactory.h paritybit.h stopbit.h
 termiosserialport.o:	serialportinterface.h
 		$(C++) $(CFLAGS) -c termiosserialport.cpp
 		
+RPLidar.o:		RPLidar.h lidar.h RPLidarIncludes/rplidar.h
+		$(C++) $(CFLAGS) -c RPLidar.cpp 
+		
 clean:
 		rm -f $(OBJS) $(TSTEXEC) $(ARLIB) $(TSTOBJS)
 
 test:		$(TSTEXEC)
 
-$(TSTEXEC):	$(ARLIB) $(TSTOBJS)
-		$(C++) $(CTESTFLAGS) $(TESTINCLUDES) -o $(TSTEXEC) Tests/mcstest.cpp $(GTESTFLAGS) $(TSTOBJS) $(ARLIB)
+Tests/LidarTest: $(ARLIB)
+		$(C++) $(CFLAGS) -pthread -o Tests/LidarTest Tests/LidarTest.cpp $(ARLIB) RPLidarLib/librplidar_sdk.a
+
+#$(TSTEXEC):	$(ARLIB) $(TSTOBJS)
+#		$(C++) $(CTESTFLAGS) $(TESTINCLUDES) -o $(TSTEXEC) Tests/mcstest.cpp $(GTESTFLAGS) $(TSTOBJS) $(ARLIB)
 		
 #######################Compile commands for test objects start here#######################
 #Tests/manualcontrolsystemtest.o:			Tests/manualcontrolsystemtest.cpp manualcontrolsystem.h

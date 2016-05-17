@@ -117,6 +117,8 @@ void NRMC_MCS::ManualControlSystem::mcs()
 	bool unlock = false;
 	SmrtPeripheral* controller = manualControl ? hardwareInterface->getPeripheral(PeripheralSystem::LocomotionSystem) : 0;
 
+	dynamic_cast<MotorController*>(controller->getPeripheral())->setSpeed(4,0.70,Direction::both);
+
 	while (run)
 	{
 		queueLock.lock();

@@ -10,8 +10,12 @@
 
 #include "lidar.h"
 #include <string>
+#include "peripheralsystem.h"
+#include "peripheraltype.h"
+#include "RPLidarIncludes/rplidar.h"
 
 using std::string;
+using namespace rp::standalone::rplidar;
 
 namespace NRMCHardware
 {
@@ -20,6 +24,7 @@ namespace NRMCHardware
 	private:
 		string port;
 		PeripheralSystem sys;
+		RPlidarDriver* driver;
 	public:
 		vector<ScanPoint> getScan();
 		PeripheralType getType (  );
@@ -29,6 +34,8 @@ namespace NRMCHardware
 		virtual ~RPLidar();
 		bool startScan();
 		bool stopScan();
+	private:
+		bool checkRPLIDARHealth(RPlidarDriver& drv);
 	};
 }
 #endif /* HARDWARELIB_RPLIDAR_H_ */

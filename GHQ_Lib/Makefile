@@ -12,7 +12,7 @@ LIBS =
 OBJS = generalhardwarequerysystem.o
 TSTOBJS = 
 ARLIB = NRMC_GHQSLib.a
-TSTEXEC = 
+TSTEXEC = Tests/GHQLidarExample
 
 #Rules to create target file Driver
 # If any files on line with colon are modified, then recompile the object file
@@ -27,10 +27,10 @@ generalhardwarequerysystem.o:		../NetworkLib/exchangesubscriber.h ../NetworkLib/
 clean:
 		rm -f $(OBJS) $(TSTEXEC) $(ARLIB) $(TSTOBJS)
 
-#test:		$(TSTEXEC)
+test:		$(TSTEXEC)
 
-#$(TSTEXEC):	$(ARLIB) $(TSTOBJS)
-#		$(C++) $(CTESTFLAGS) $(TESTINCLUDES) -o $(TSTEXEC) Tests/mcstest.cpp $(GTESTFLAGS) $(TSTOBJS) $(ARLIB)
+$(TSTEXEC):	$(ARLIB)
+		$(C++) $(CFLAGS) -o $(TSTEXEC) Tests/GHQLidarExample.cpp $(ARLIB) ../NetworkLib/NRMCNetworkLib.a ../HardwareLib/NRMCHardwareLib.a ../HardwareLib/RPLidarLib/librplidar_sdk.a
 		
 #######################Compile commands for test objects start here#######################
 #Tests/manualcontrolsystemtest.o:			Tests/manualcontrolsystemtest.cpp manualcontrolsystem.h

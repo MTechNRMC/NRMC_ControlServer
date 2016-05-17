@@ -1,13 +1,14 @@
 #include "generalhardwarequerysystem.h"
-#include <exception>
+
+#include <stdexcept>
 #include "../NetworkLib/liadrmessage.h"
 
 using namespace NRMC_GHQS;
-using std::bad_function_call;
 using NRMCNetwork::LIADRMessage;
 using NRMCHardware::Lidar;
 using NRMCHardware::PeripheralSystem;
 using NRMCHardware::SmrtPeripheral;
+using std::runtime_error;
 
 Message* GeneralHardwareQuerySystem::queryHardware ( Device device )
 {
@@ -33,12 +34,40 @@ Message* GeneralHardwareQuerySystem::queryHardware ( Device device )
 	return msg;
 }
 
+GeneralHardwareQuerySystem::GeneralHardwareQuerySystem ( HardwareInterface& hardwareLayer )
+{
+	/** !!!used for testing only!!! **/
+	networkInterface = 0;
+	hardwareInterface = &hardwareLayer;
+	init();
+}
+
 GeneralHardwareQuerySystem::GeneralHardwareQuerySystem ( MDS_Interface& mdSystem, HardwareInterface& hardwareLayer )
 {
 	networkInterface = &mdSystem;
 	hardwareInterface = &hardwareLayer;
+	init();
 }
 
 GeneralHardwareQuerySystem::~GeneralHardwareQuerySystem (  )
-{}
+{
+	networkInterface = 0;
+	hardwareInterface = 0;
+}
 
+void GeneralHardwareQuerySystem::init()
+{
+	// start the lidars scan
+	SmrtPeripheral* locLidarPhral = hardwareInterface->getPeripheral(PeripheralSystem::LocalizationLIDAR);
+
+	Lidar* ldr = dynamic_cast<Lidar*>(locLidarPhral->getPeripheral());
+
+	if(ldr == 0)
+		runtime_error("Failed to start the LIDAR(s)");
+
+	ldr->startScan();
+
+	delete locLidarPhral;
+	ldr = 0;
+	locLidarPhral = 0;
+}

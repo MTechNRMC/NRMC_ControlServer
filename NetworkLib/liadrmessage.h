@@ -3,6 +3,7 @@
 
 #include "message.h"
 #include <vector>
+#include <netinet/in.h>
 #include "../HardwareLib/lidar.h"
 
 using NRMCHardware::ScanPoint;
@@ -17,11 +18,11 @@ namespace NRMCNetwork
 	private:
 		int opcode;
 		vector<ScanPoint> scan;
-		sockaddr_in& addr;
+		sockaddr_in addr;
 		// Operations
 	public:
 		LIADRMessage(char* msg, sockaddr_in& addr);
-		LIADRMessage(int opcode, vector<ScanPoint>& scan, sockaddr_in& addr);
+		LIADRMessage(int opcode, const vector<ScanPoint>& scan, sockaddr_in& addr);
 		LIADRMessage(const LIADRMessage& msg);
 		~LIADRMessage();
 		vector<ScanPoint>& getScan();

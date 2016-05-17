@@ -3,9 +3,9 @@
 using namespace NRMCNetwork;
 
 LIADRMessage::LIADRMessage ( char* msg, sockaddr_in& addr )
-{	/** UNUSED **/	}
+{/** UNUSED **/}
 
-LIADRMessage::LIADRMessage ( int opcode, vector<ScanPoint>& scan, sockaddr_in& addr )
+LIADRMessage::LIADRMessage ( int opcode, const vector<ScanPoint>& scan, sockaddr_in& addr )
 {
 	this->opcode = opcode;
 	this->scan = scan;

@@ -19,8 +19,6 @@ namespace NRMC_GHQS
 		GHQS_Interface() {};
 		virtual ~GHQS_Interface() {};
 		virtual Message* queryHardware(Device device) = 0;
-		virtual bool startHardwareStream(GHQS_Observer& observer) = 0;
-		virtual bool stopHardwareStream(GHQS_Observer& observer) = 0;
 	};
 }
 #endif

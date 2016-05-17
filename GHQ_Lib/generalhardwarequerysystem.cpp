@@ -1,46 +1,39 @@
 #include "generalhardwarequerysystem.h"
 #include <exception>
+#include "../NetworkLib/liadrmessage.h"
 
 using namespace NRMC_GHQS;
 using std::bad_function_call;
-
-GHQS_Interface& GeneralHardwareQuerySystem::getInstance (  )
-{
-	throw bad_function_call();
-}
-
-void GeneralHardwareQuerySystem::queueMessage ( Message& message )
-{
-	throw bad_function_call();
-}
-
-bool GeneralHardwareQuerySystem::subscriberWants ( Message& message )
-{
-	throw bad_function_call();
-}
+using NRMCNetwork::LIADRMessage;
+using NRMCHardware::Lidar;
+using NRMCHardware::PeripheralSystem;
 
 Message* GeneralHardwareQuerySystem::queryHardware ( Device device )
 {
+	sockaddr_in dummyAddr;
 	Message* msg = 0;
+
+	switch(device)
+	{
+	case Device::LocalizationLIDAR:
+		Lidar* rp = dynamic_cast<Lidar*>(hardwareInterface->getPeripheral(PeripheralSystem::LocalizationLIDAR));
+
+		if(rp == 0)
+			break;
+
+		msg = new LIADRMessage(0, rp->getScan(), dummyAddr);
+		break;
+	}
 
 	return msg;
 }
 
-bool GeneralHardwareQuerySystem::startHardwareStream ( GHQS_Observer& observer )
-{
-	throw bad_function_call();
-}
-
-bool GeneralHardwareQuerySystem::stopHardwareStream ( GHQS_Observer& observer )
-{
-	throw bad_function_call();
-}
-
 GeneralHardwareQuerySystem::GeneralHardwareQuerySystem ( MDS_Interface& mdSystem, HardwareInterface& hardwareLayer )
 {
+	networkInterface = &mdSystem;
+	hardwareInterface = &hardwareLayer;
 }
 
 GeneralHardwareQuerySystem::~GeneralHardwareQuerySystem (  )
-{
-}
+{}
 

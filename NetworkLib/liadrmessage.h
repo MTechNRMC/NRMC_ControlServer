@@ -25,9 +25,11 @@ namespace NRMCNetwork
 		LIADRMessage(const LIADRMessage& msg);
 		~LIADRMessage();
 		vector<ScanPoint>& getScan();
-		int getOpcode();
-		sockaddr_in& getAddress();
-		char* getMessage();
+		int getOpcode() const;
+		sockaddr_in getAddress() const;
+		const char* getMessage() const;
+		Message* clone(  ) const;
+		int getSize() const;
 	};
 }
 

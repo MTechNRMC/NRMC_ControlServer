@@ -27,18 +27,27 @@ vector<ScanPoint>& LIADRMessage::getScan()
 	return scan;
 }
 
-int LIADRMessage::getOpcode (  )
+int LIADRMessage::getOpcode (  ) const
 {
 	return opcode;
 }
 
-sockaddr_in& LIADRMessage::getAddress (  )
+sockaddr_in LIADRMessage::getAddress (  ) const
 {
 	return addr;
 }
 
-char* LIADRMessage::getMessage (  )
+const char* LIADRMessage::getMessage (  ) const
 {
 	return 0;
 }
 
+Message* LIADRMessage::clone(  ) const
+{
+	return new LIADRMessage(*this);
+}
+
+int LIADRMessage::getSize() const
+{
+	return -1;
+}

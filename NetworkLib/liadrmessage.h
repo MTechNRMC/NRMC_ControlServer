@@ -13,13 +13,11 @@ namespace NRMCNetwork
 		int opcode;
 		double distance;
 		double angle;
-		double scanRate;
-		int rpm;
 		sockaddr_in& addr;
 		// Operations
 	public:
 		LIADRMessage(char* msg, sockaddr_in& addr);
-		LIADRMessage(int opcode, double distance, double angle, double scanRate, int rpm, sockaddr_in& addr);
+		LIADRMessage(int opcode, double distance, double angle, sockaddr_in& addr);
 		LIADRMessage(const LIADRMessage& msg);
 		~LIADRMessage();
 		double getDistance();

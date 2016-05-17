@@ -23,7 +23,7 @@ namespace NRMC_ACS
 		// Operations
 	public:
 		Position getPosition();
-		LocalizationSystem(double xCenterOffset, double yCenterOffset, double xOffset, double yOffset, double resolution, GHQS_Interface& ghqs);
+		LocalizationSystem(double xOffset, double yOffset, GHQS_Interface& ghqs);
 		~LocalizationSystem();
 		void subscribe ( LocalizationObserver& subscriber );
 		void unsubscribe ( LocalizationObserver& subscriber );

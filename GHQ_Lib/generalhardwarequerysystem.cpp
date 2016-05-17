@@ -21,7 +21,9 @@ bool GeneralHardwareQuerySystem::subscriberWants ( Message& message )
 
 Message* GeneralHardwareQuerySystem::queryHardware ( Device device )
 {
-	throw bad_function_call();
+	Message* msg = 0;
+
+	return msg;
 }
 
 bool GeneralHardwareQuerySystem::startHardwareStream ( GHQS_Observer& observer )

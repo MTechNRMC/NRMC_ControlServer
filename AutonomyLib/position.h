@@ -8,8 +8,8 @@ namespace NRMC_ACS
 	{
 		// Attributes
 	public:
-		int xPos;
-		int yPos;
+		double xPos;
+		double yPos;
 		double bearing;
 	};
 }

@@ -9,7 +9,7 @@ Position LocalizationSystem::getPosition (  )
 	throw bad_function_call();
 }
 
-LocalizationSystem::LocalizationSystem ( double xCenterOffset, double yCenterOffset, double xOffset, double yOffset, double resolution, GHQS_Interface& ghqs )
+LocalizationSystem::LocalizationSystem ( double xOffset, double yOffset, GHQS_Interface& ghqs )
 {
 }
 

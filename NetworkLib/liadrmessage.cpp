@@ -6,7 +6,7 @@ LIADRMessage::LIADRMessage ( char* msg, sockaddr_in& addr )
 {
 }
 
-LIADRMessage::LIADRMessage ( int opcode, double distance, double angle, double scanRate, int rpm, sockaddr_in& addr )
+LIADRMessage::LIADRMessage ( int opcode, double distance, double angle, sockaddr_in& addr )
 {
 }
 

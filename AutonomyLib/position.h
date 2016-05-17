@@ -10,7 +10,7 @@ namespace NRMC_ACS
 	public:
 		double xPos;
 		double yPos;
-		double bearing;
+		double heading;
 	};
 }
 

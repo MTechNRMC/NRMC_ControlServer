@@ -2,6 +2,11 @@
 #define LIADRMESSAGE_H
 
 #include "message.h"
+#include <vector>
+#include "../HardwareLib/lidar.h"
+
+using NRMCHardware::ScanPoint;
+using std::vector;
 
 namespace NRMCNetwork
 {
@@ -11,19 +16,15 @@ namespace NRMCNetwork
 		// Attributes
 	private:
 		int opcode;
-		double distance;
-		double angle;
+		vector<ScanPoint> scan;
 		sockaddr_in& addr;
 		// Operations
 	public:
 		LIADRMessage(char* msg, sockaddr_in& addr);
-		LIADRMessage(int opcode, double distance, double angle, sockaddr_in& addr);
+		LIADRMessage(int opcode, vector<ScanPoint>& scan, sockaddr_in& addr);
 		LIADRMessage(const LIADRMessage& msg);
 		~LIADRMessage();
-		double getDistance();
-		double getAngle();
-		double getScanRate();
-		int getRPM();
+		vector<ScanPoint>& getScan();
 		int getOpcode();
 		sockaddr_in& getAddress();
 		char* getMessage();

@@ -1,6 +1,7 @@
 #ifndef LOCALIZATIONOBSERVER_H
 #define LOCALIZATIONOBSERVER_H
 
+#include "position.h"
 
 namespace NRMC_ACS
 {

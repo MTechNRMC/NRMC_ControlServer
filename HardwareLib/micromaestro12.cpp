@@ -133,7 +133,7 @@ void MicroMaestro12::setPos ( int servo, double pos )
 
 MicroMaestro12::MicroMaestro12 ( SerialPortInterface* port, PeripheralSystem sys )
 {
-	Motor tmp = { Direction::stop, '\xfe', '\x00' };
+	Motor tmp = { Direction::stop, 127,  127};
 	this->port = port;
 	this->sys = sys;
 	motors = new Motor[getNumOfMotors()];
@@ -176,11 +176,15 @@ void NRMCHardware::MicroMaestro12::setMotor(int motor)
 
 	switch (motors[motor].dir)
 	{
-	case Direction::backward:	// set move forward
-		speed = motors[motor].backwardSpeed;
+	case Direction::backward:	// set move backwards
+		speed = motors[motor].backwardSpeed - motors[motor].netural;
 		break;
-	case Direction::forward:	// set move backwards
-		speed = motors[motor].forwardSpeed;
+	case Direction::forward:	// set move forwards
+		speed = motors[motor].forwardSpeed + motors[motor].netural;
+		break;
+	case Direction::both:
+		speed = motors[motor].backwardSpeed - motors[motor].netural;
+		speed = motors[motor].forwardSpeed + motors[motor].netural;
 		break;
 	default:					// default to stop
 		speed = motors[motor].netural;
